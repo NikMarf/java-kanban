@@ -9,6 +9,7 @@ public class SubTask extends Task {
         this.idParentTask = idParentTask;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

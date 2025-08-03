@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
-    ArrayList<SubTask> subTasks;
+    public ArrayList<SubTask> subTasks;
 
     public Epic(String description, String name, StatusProgress status) {
         super(name, description, status);
@@ -29,4 +29,14 @@ public class Epic extends Task {
         return Objects.hash(super.hashCode(), subTasks);
     }
 
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "subTasks=" + subTasks +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", id=" + id +
+                '}';
+    }
 }
