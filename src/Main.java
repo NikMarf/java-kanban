@@ -20,11 +20,13 @@ public class Main {
         //manager.printAllSubTask();
         //manager.printAllEpic();
         //manager.printAllTask();
-        manager.removeAllSubTask();
+        //manager.removeAllSubTask();
         //manager.removeAllTask();
         //manager.removeAllEpic();
-        //manager.printAllTask();
+        manager.printAllTask();
         //System.out.println(manager.taskCollection);
         System.out.println(manager.epicCollection);
+
+        System.out.println(manager.outputByIdEpic());
     }
 }
