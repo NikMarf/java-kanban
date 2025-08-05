@@ -9,6 +9,11 @@ public class SubTask extends Task {
         this.idParentTask = idParentTask;
     }
 
+    public SubTask(String name, String description, StatusProgress status) {
+        super(name, description, status);
+        this.id = hashCode();
+    }
+
 
     @Override
     public boolean equals(Object o) {

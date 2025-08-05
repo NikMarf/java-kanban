@@ -11,6 +11,7 @@ public class Main {
         taskEpic1.addSubTask("Сделать срочно!", "Пропылесосить", StatusProgress.NEW);
         taskEpic1.addSubTask("После пылесоса", "Протереть полки", StatusProgress.NEW);
         taskEpic2.addSubTask("Новая задача", "Отладить все", StatusProgress.NEW);
+        SubTask subTest = new SubTask("ХХХХХ", "ЫЫЫЫЫЫЫ", StatusProgress.NEW);
         //System.out.println(taskEpic1.subTasks.toString());
         //System.out.println(taskEpic1.toString());
         manager.epicCollection.put(taskEpic1.id, taskEpic1);
@@ -26,7 +27,8 @@ public class Main {
         manager.printAllTask();
         //System.out.println(manager.taskCollection);
         System.out.println(manager.epicCollection);
-
-        System.out.println(manager.outputByIdSubTask());
+        manager.addSubTaskInEpic(subTest, -20833738);
+        //System.out.println(manager.outputByIdSubTask());
+        System.out.println(manager.epicCollection);
     }
 }

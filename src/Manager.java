@@ -26,11 +26,25 @@ public class Manager {
         for (Integer id : epicCollection.keySet()) {
             if (idParent.equals(id)) {
                 Epic epic = epicCollection.get(id);
+                newSubTask.idParentTask = id;
                 epic.subTasks.add(newSubTask);
             }
-
         }
+    }
 
+    public void updateTask(Task task, Integer id) {
+        if (taskCollection.containsKey(id)) {
+            taskCollection.put(id, task);
+        }
+    }
+
+    public void updateEpic(Epic epic, Integer id) {
+        if (epicCollection.containsKey(id)) {
+            epicCollection.put(id, epic);
+        }
+    }
+
+    public void updateSubTask(SubTask newSubTask, Integer id) {
     }
 
     public void printAllTask() {
