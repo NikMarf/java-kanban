@@ -16,6 +16,13 @@ public class Epic extends Task {
         System.out.println("Сделано!");
     }
 
+    public void addSubTask1(SubTask newSubTask) {
+        SubTask subTaskForEpic = new SubTask(description, name, status, this.id);
+
+        subTasks.add(subTaskForEpic);
+        System.out.println("Сделано!");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

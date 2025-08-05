@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Manager {
@@ -15,6 +14,25 @@ public class Manager {
         epicCollection = new HashMap<>();
     }
 
+    public void addTask(Task task) {
+        taskCollection.put(task.id, task);
+    }
+
+    public void addEpic(Epic epic) {
+        epicCollection.put(epic.id, epic);
+    }
+
+    public void addSubTaskInEpic(SubTask newSubTask, Integer idParent) {
+        for (Integer id : epicCollection.keySet()) {
+            if (idParent.equals(id)) {
+                Epic epic = epicCollection.get(id);
+                epic.subTasks.add(newSubTask);
+            }
+
+        }
+
+    }
+
     public void printAllTask() {
         for (Integer id : taskCollection.keySet()) {
             Task task = taskCollection.get(id);
@@ -24,7 +42,7 @@ public class Manager {
 
     public void printAllEpic() {
         for (Integer id : epicCollection.keySet()) {
-            Task epic = epicCollection.get(id);
+            Epic epic = epicCollection.get(id);
             System.out.println(epic.toString());
         }
     }
@@ -68,24 +86,26 @@ public class Manager {
     public ArrayList<SubTask> outputByIdSubTask() {
         System.out.println("Введите id Parent или SubTask:");
         int idOutput = scanner.nextInt();
-        for (Integer id : taskCollection.keySet()) {
-            if (id.equals(idOutput)) {
-                ArrayList<SubTask> idParentSubTask = new ArrayList<>();
-                Epic epic = epicCollection.get(id);
+        ArrayList<SubTask> idParentSubTask = new ArrayList<>();
+        for (Integer id : epicCollection.keySet()) {
+            Epic epic = epicCollection.get(id);
+            //System.out.println(epicCollection.get(id));
+            if (id == idOutput) {
                 for (SubTask sb : epic.subTasks) {
                     idParentSubTask.add(sb);
                 }
-            } else if (id.equals()) {
-                Epic epic = epicCollection.
+            } else {
+                for (SubTask sb : epic.subTasks) {
+                    if (sb.id == idOutput) {
+                        idParentSubTask.add(sb);
+                    }
+                }
             }
         }
-        if (idOutput.equals(epicCollection.))
-        Epic epic = epicCollection.get(idOutput);
-        if (idOutput == epic.s) {
-            System.out.println();
-        }
-        return idParentSubTask.add(sb);
+        return idParentSubTask;
     }
+
+
 
 }
 

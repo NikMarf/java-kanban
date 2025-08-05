@@ -18,7 +18,7 @@ public class Main {
         manager.taskCollection.put(task1.id, task1);
         //System.out.println(manager.epicCollection.toString());
         //manager.printAllSubTask();
-        //manager.printAllEpic();
+        manager.printAllEpic();
         //manager.printAllTask();
         //manager.removeAllSubTask();
         //manager.removeAllTask();
@@ -27,6 +27,6 @@ public class Main {
         //System.out.println(manager.taskCollection);
         System.out.println(manager.epicCollection);
 
-        System.out.println(manager.outputByIdEpic());
+        System.out.println(manager.outputByIdSubTask());
     }
 }
