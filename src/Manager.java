@@ -20,6 +20,7 @@ public class Manager {
 
     public void addEpic(Epic epic) {
         epicCollection.put(epic.id, epic);
+        epic.status = checkStatusEpicProgress(epic.id);
     }
 
     public void addSubTaskInEpic(SubTask newSubTask, Integer idParent) {
@@ -28,23 +29,70 @@ public class Manager {
                 Epic epic = epicCollection.get(id);
                 newSubTask.idParentTask = id;
                 epic.subTasks.add(newSubTask);
+                epic.status = checkStatusEpicProgress(epic.id);
+            }
+        }
+
+    }
+
+    public void updateTask(Task task, int id) {
+        if (taskCollection.containsKey(id)) {
+            taskCollection.put(id, task);
+        }
+
+        for (Task ts : taskCollection.values()) {
+            if (ts.equals(task)) {
+                epicCollection.remove(id);
             }
         }
     }
 
-    public void updateTask(Task task, Integer id) {
-        if (taskCollection.containsKey(id)) {
-            taskCollection.put(id, task);
-        }
-    }
-
-    public void updateEpic(Epic epic, Integer id) {
+    public void updateEpic(Epic epic, int id) {
         if (epicCollection.containsKey(id)) {
             epicCollection.put(id, epic);
+            epic.status = checkStatusEpicProgress(epic.id);
         }
+
+        for (Epic ep : epicCollection.values()) {
+            if (ep.equals(epic)) {
+                epicCollection.remove(id);
+            }
+        }
+
     }
 
-    public void updateSubTask(SubTask newSubTask, Integer id) {
+    public void updateSubTask(SubTask newSubTask, int idSubtask) {
+        ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
+        for(Epic epic : epicCollection.values()) {
+            int i;
+            for (i = 0; i < epic.subTasks.size(); i++) {
+                if (epic.subTasks.get(i).id == idSubtask) {
+                    newSubTask.idParentTask = epic.id;
+                    epic.subTasks.add(i, newSubTask);
+                    epic.subTasks.remove(i+1);
+
+                }
+            }
+            epic.status = checkStatusEpicProgress(epic.id);
+
+            for (i = 0; i < epic.subTasks.size(); i++) {
+                for (int j = i; j < epic.subTasks.size(); j++) {
+                    if (j < epic.subTasks.size() - 1) {
+                        if (epic.subTasks.get(j).equals(epic.subTasks.get(j+1))) {
+                            repetittionsSubTask.add(j+1);
+                        }
+                    }
+                }
+            }
+            if (!repetittionsSubTask.isEmpty()) {
+                for (Integer rep : repetittionsSubTask) {
+                    epic.subTasks.remove((int) rep);
+                }
+            }
+        }
+
+
+
     }
 
     public void printAllTask() {
@@ -85,6 +133,26 @@ public class Manager {
         }
     }
 
+    public void removeByIdTask (int id) {
+        taskCollection.remove(id);
+    }
+
+    public void RemoveByIdEpic(int id) {
+        epicCollection.remove(id);
+    }
+
+    public void removeByIsSubTask(int id) {
+        for(Epic epic : epicCollection.values()) {
+            int i;
+            for (i = 0; i < epic.subTasks.size(); i++) {
+                if (epic.subTasks.get(i).id == id) {
+                    epic.subTasks.remove(i);
+                }
+            }
+        }
+
+    }
+
     public Task outputByIdTask() {
         System.out.println("Введите id Task:");
         int idOutput = scanner.nextInt();
@@ -117,6 +185,33 @@ public class Manager {
             }
         }
         return idParentSubTask;
+    }
+
+    public StatusProgress checkStatusEpicProgress(int id) {
+        Epic epic = epicCollection.get(id);
+        StatusProgress statusProgress = StatusProgress.NEW;
+        int i = 0;
+        for (SubTask sb : epic.subTasks) {
+            switch (sb.status) {
+                case NEW:
+                    break;
+                case IN_PROGRESS:
+                    statusProgress = StatusProgress.IN_PROGRESS;
+                    continue;
+                case DONE:
+                    if ((epic.subTasks.size()-1) == i) {
+                        statusProgress = StatusProgress.DONE;
+                        return statusProgress;
+                    } else {
+                        i++;
+                        statusProgress = StatusProgress.IN_PROGRESS;
+                        break;
+                    }
+
+            }
+        }
+
+        return statusProgress;
     }
 
 
