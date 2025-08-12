@@ -1,3 +1,5 @@
+package practicum.model;
+
 public enum StatusProgress {
     NEW,
     IN_PROGRESS,

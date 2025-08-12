@@ -1,8 +1,11 @@
+package practicum.model;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
-    public ArrayList<SubTask> subTasks;
+
+    ArrayList<SubTask> subTasks; //Список дочерних SubTask
 
     public Epic(String description, String name, StatusProgress status) {
         super(name, description, status);
@@ -10,17 +13,8 @@ public class Epic extends Task {
         subTasks = new ArrayList<>();
     }
 
-    public void addSubTask(String description, String name, StatusProgress status) {
-        SubTask subTaskForEpic = new SubTask(description, name, status, this.id);
-        subTasks.add(subTaskForEpic);
-        System.out.println("Сделано!");
-    }
-
-    public void addSubTask1(SubTask newSubTask) {
-        SubTask subTaskForEpic = new SubTask(description, name, status, this.id);
-
-        subTasks.add(subTaskForEpic);
-        System.out.println("Сделано!");
+    public ArrayList<SubTask> getSubTasks() {
+        return subTasks;
     }
 
     @Override

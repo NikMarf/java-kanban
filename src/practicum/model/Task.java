@@ -1,3 +1,5 @@
+package practicum.model;
+
 import java.util.Objects;
 
 public class Task {
@@ -7,10 +9,30 @@ public class Task {
     int id;
 
     public Task(String name, String description, StatusProgress status) {
-        this.name = name;
-        this.description = description;
+        this.name = name; // Поле имени
+        this.description = description; // Поле описани
+        this.status = status; // Поле статуса
+        this.id = hashCode(); // Поле идентификатора
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public StatusProgress getStatus() {
+        return status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setStatus(StatusProgress status) {
         this.status = status;
-        this.id = hashCode();
     }
 
     @Override

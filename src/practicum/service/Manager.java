@@ -1,10 +1,14 @@
+package practicum.service;
+
+import practicum.model.Epic;
+import practicum.model.StatusProgress;
+import practicum.model.SubTask;
+import practicum.model.Task;
+
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Manager {
-
-    Scanner scanner = new Scanner(System.in);
 
     public HashMap<Integer, Task> taskCollection;
     public HashMap<Integer, Epic> epicCollection;
@@ -15,27 +19,47 @@ public class Manager {
     }
 
     public void addTask(Task task) {
-        taskCollection.put(task.id, task);
+        //Добавление нового Task
+        taskCollection.put(task.getId(), task);
     }
 
     public void addEpic(Epic epic) {
-        epicCollection.put(epic.id, epic);
-        epic.status = checkStatusEpicProgress(epic.id);
+        //Добавление нового Epic
+        epicCollection.put(epic.getId(), epic);
+        epic.setStatus(checkStatusEpicProgress(epic.getId()));
     }
 
     public void addSubTaskInEpic(SubTask newSubTask, Integer idParent) {
+        //Добавление нового SubTask в Epic
+        ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
         for (Integer id : epicCollection.keySet()) {
             if (idParent.equals(id)) {
                 Epic epic = epicCollection.get(id);
-                newSubTask.idParentTask = id;
-                epic.subTasks.add(newSubTask);
-                epic.status = checkStatusEpicProgress(epic.id);
+                newSubTask.setIdParentTask(id);
+                epic.getSubTasks().add(newSubTask);
+                epic.setStatus(checkStatusEpicProgress(epic.getId()));
             }
         }
+        for(Epic epic : epicCollection.values()) {
 
+            for (int j = 0; j < epic.getSubTasks().size(); j++) {
+                if (j < epic.getSubTasks().size() - 1) {
+                    if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
+                        repetittionsSubTask.add(j + 1);
+                    }
+                }
+            }
+
+            if (!repetittionsSubTask.isEmpty()) {
+                for (Integer rep : repetittionsSubTask) {
+                    epic.getSubTasks().remove((int) rep);
+                }
+            }
+        }
     }
 
     public void updateTask(Task task, int id) {
+        // Обновление Task
         if (taskCollection.containsKey(id)) {
             taskCollection.put(id, task);
         }
@@ -48,9 +72,10 @@ public class Manager {
     }
 
     public void updateEpic(Epic epic, int id) {
+        // Обновление Epic
         if (epicCollection.containsKey(id)) {
             epicCollection.put(id, epic);
-            epic.status = checkStatusEpicProgress(epic.id);
+            epic.setStatus(checkStatusEpicProgress(epic.getId()));
         }
 
         for (Epic ep : epicCollection.values()) {
@@ -58,27 +83,27 @@ public class Manager {
                 epicCollection.remove(id);
             }
         }
-
     }
 
     public void updateSubTask(SubTask newSubTask, int idSubtask) {
+        // Обновление SubTask в Epic
         ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
         for(Epic epic : epicCollection.values()) {
             int i;
-            for (i = 0; i < epic.subTasks.size(); i++) {
-                if (epic.subTasks.get(i).id == idSubtask) {
-                    newSubTask.idParentTask = epic.id;
-                    epic.subTasks.add(i, newSubTask);
-                    epic.subTasks.remove(i+1);
-
+            for (i = 0; i < epic.getSubTasks().size(); i++) {
+                if (epic.getSubTasks().get(i).getId() == idSubtask) {
+                    newSubTask.setIdParentTask(epic.getId());
+                    epic.getSubTasks().add(i, newSubTask);
+                    epic.getSubTasks().remove(i+1);
                 }
             }
-            epic.status = checkStatusEpicProgress(epic.id);
 
-            for (i = 0; i < epic.subTasks.size(); i++) {
-                for (int j = i; j < epic.subTasks.size(); j++) {
-                    if (j < epic.subTasks.size() - 1) {
-                        if (epic.subTasks.get(j).equals(epic.subTasks.get(j+1))) {
+            epic.setStatus(checkStatusEpicProgress(epic.getId()));
+
+            for (i = 0; i < epic.getSubTasks().size(); i++) {
+                for (int j = i; j < epic.getSubTasks().size(); j++) {
+                    if (j < epic.getSubTasks().size() - 1) {
+                        if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j+1))) {
                             repetittionsSubTask.add(j+1);
                         }
                     }
@@ -86,16 +111,14 @@ public class Manager {
             }
             if (!repetittionsSubTask.isEmpty()) {
                 for (Integer rep : repetittionsSubTask) {
-                    epic.subTasks.remove((int) rep);
+                    epic.getSubTasks().remove((int) rep);
                 }
             }
         }
-
-
-
     }
 
     public void printAllTask() {
+        //Вывод всеx Task
         for (Integer id : taskCollection.keySet()) {
             Task task = taskCollection.get(id);
             System.out.println(task.toString());
@@ -103,6 +126,7 @@ public class Manager {
     }
 
     public void printAllEpic() {
+        //Вывод всех Epic
         for (Integer id : epicCollection.keySet()) {
             Epic epic = epicCollection.get(id);
             System.out.println(epic.toString());
@@ -110,75 +134,78 @@ public class Manager {
     }
 
     public void printAllSubTask() {
+        //Вывод всех SubTask из всех Epic
         for (Integer id : epicCollection.keySet()) {
             Epic epic = epicCollection.get(id);
-            for (SubTask sb : epic.subTasks) {
+            for (SubTask sb : epic.getSubTasks()) {
                 System.out.println(sb.toString());
             }
         }
     }
 
     public void removeAllTask() {
+        //Удаление всеx Task
         taskCollection.clear();
     }
 
     public void removeAllEpic() {
+        //Удаление всеx Epic
         epicCollection.clear();
     }
 
     public void removeAllSubTask() {
+        //Удаление всеx SubTask из всех Epic
         for (Integer id : epicCollection.keySet()) {
             Epic epic = epicCollection.get(id);
-            epic.subTasks.clear();
+            epic.getSubTasks().clear();
         }
     }
 
     public void removeByIdTask (int id) {
+        //Удаление Task по идентификатору
         taskCollection.remove(id);
     }
 
     public void RemoveByIdEpic(int id) {
+        //Удаление Epic по идентификатору
         epicCollection.remove(id);
     }
 
     public void removeByIsSubTask(int id) {
+        //Удаление SubTask по идентификатору из всех Epic
         for(Epic epic : epicCollection.values()) {
             int i;
-            for (i = 0; i < epic.subTasks.size(); i++) {
-                if (epic.subTasks.get(i).id == id) {
-                    epic.subTasks.remove(i);
+            for (i = 0; i < epic.getSubTasks().size(); i++) {
+                if (epic.getSubTasks().get(i).getId() == id) {
+                    epic.getSubTasks().remove(i);
                 }
             }
         }
 
     }
 
-    public Task outputByIdTask() {
-        System.out.println("Введите id Task:");
-        int idOutput = scanner.nextInt();
+    public Task outputByIdTask(int idOutput) {
+        //Возвращение конретного Task
         return taskCollection.get(idOutput);
     }
 
-    public Epic outputByIdEpic() {
-        System.out.println("Введите id Epic:");
-        int idOutput = scanner.nextInt();
+    public Epic outputByIdEpic(int idOutput) {
+        //Возвращение конретного Epic
         return epicCollection.get(idOutput);
     }
 
-    public ArrayList<SubTask> outputByIdSubTask() {
-        System.out.println("Введите id Parent или SubTask:");
-        int idOutput = scanner.nextInt();
+    public ArrayList<SubTask> outputByIdSubTask(int idOutput) {
+        //Возвращение конретного SubTask из Epic
         ArrayList<SubTask> idParentSubTask = new ArrayList<>();
         for (Integer id : epicCollection.keySet()) {
             Epic epic = epicCollection.get(id);
-            //System.out.println(epicCollection.get(id));
             if (id == idOutput) {
-                for (SubTask sb : epic.subTasks) {
+                for (SubTask sb : epic.getSubTasks()) {
                     idParentSubTask.add(sb);
                 }
             } else {
-                for (SubTask sb : epic.subTasks) {
-                    if (sb.id == idOutput) {
+                for (SubTask sb : epic.getSubTasks()) {
+                    if (sb.getId() == idOutput) {
                         idParentSubTask.add(sb);
                     }
                 }
@@ -188,18 +215,19 @@ public class Manager {
     }
 
     public StatusProgress checkStatusEpicProgress(int id) {
+        //Присвоение статуса Epic
         Epic epic = epicCollection.get(id);
         StatusProgress statusProgress = StatusProgress.NEW;
         int i = 0;
-        for (SubTask sb : epic.subTasks) {
-            switch (sb.status) {
+        for (SubTask sb : epic.getSubTasks()) {
+            switch (sb.getStatus()) {
                 case NEW:
                     break;
                 case IN_PROGRESS:
                     statusProgress = StatusProgress.IN_PROGRESS;
                     continue;
                 case DONE:
-                    if ((epic.subTasks.size()-1) == i) {
+                    if ((epic.getSubTasks().size()-1) == i) {
                         statusProgress = StatusProgress.DONE;
                         return statusProgress;
                     } else {

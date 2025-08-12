@@ -1,7 +1,10 @@
+package practicum.model;
+
 import java.util.Objects;
 
 public class SubTask extends Task {
-    int idParentTask;
+
+    int idParentTask; //Поле хранения идентификатора родителя
 
     public SubTask(String name, String description, StatusProgress status, int idParentTask) {
         super(name, description, status);
@@ -14,6 +17,13 @@ public class SubTask extends Task {
         this.id = hashCode();
     }
 
+    public int getIdParentTask() {
+        return idParentTask;
+    }
+
+    public void setIdParentTask(int idParentTask) {
+        this.idParentTask = idParentTask;
+    }
 
     @Override
     public boolean equals(Object o) {
