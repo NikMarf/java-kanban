@@ -2,10 +2,10 @@ import practicum.model.Epic;
 import practicum.model.StatusProgress;
 import practicum.model.SubTask;
 import practicum.model.Task;
-import practicum.service.Manager;
+import practicum.service.TaskManager;
 
 public class Main {
     public static void main(String[] args) {
-        Manager manager = new Manager();
+        TaskManager manager = new TaskManager();
     }
 }

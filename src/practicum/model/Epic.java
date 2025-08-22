@@ -5,11 +5,10 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-    ArrayList<SubTask> subTasks; //Список дочерних SubTask
+    private ArrayList<SubTask> subTasks; //Список дочерних SubTask
 
     public Epic(String description, String name, StatusProgress status) {
         super(name, description, status);
-        this.id = hashCode();
         subTasks = new ArrayList<>();
     }
 
@@ -18,23 +17,10 @@ public class Epic extends Task {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Epic epic = (Epic) o;
-        return Objects.equals(subTasks, epic.subTasks);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), subTasks);
-    }
-
-    @Override
     public String toString() {
         return "Epic{" +
                 "subTasks=" + subTasks +
-                ", name='" + name + '\'' +
+                ", name='" + getName() + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
