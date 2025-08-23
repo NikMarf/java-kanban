@@ -23,9 +23,9 @@ public class SubTask extends Task {
     public String toString() {
         return "SubTask{" +
                 "name='" + getName() + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                ", id=" + id +
+                ", description='" + getDescription() + '\'' +
+                ", status=" + getStatus() +
+                ", id=" + getId() +
                 ", idParentTask=" + idParentTask +
                 '}';
     }

@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Task {
     private String name;
-    String description;
-    StatusProgress status;
-    int id;
+    private String description;
+    private StatusProgress status;
+    private int id;
 
     public Task(String name, String description, StatusProgress status) {
         this.name = name; // Поле имени

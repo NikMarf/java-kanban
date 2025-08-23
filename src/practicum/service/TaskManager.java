@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class TaskManager {
 
-    public static int counterGenerationId = 0;
+    public int counterGenerationId = 0;
 
     private HashMap<Integer, Task> taskCollection;
     private HashMap<Integer, Epic> epicCollection;
@@ -20,23 +20,6 @@ public class TaskManager {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
         subTaskCollection = new HashMap<>();
-    }
-
-    public HashMap<Integer, Task> getTaskCollection() {
-        return taskCollection;
-    }
-
-    public HashMap<Integer, Epic> getEpicCollection() {
-        return epicCollection;
-    }
-
-    public HashMap<Integer, SubTask> getSubTaskCollection() {
-        return subTaskCollection;
-    }
-
-    private int setTaskId() {
-        counterGenerationId++;
-        return counterGenerationId;
     }
 
     public void addTask(Task task) {
@@ -139,19 +122,31 @@ public class TaskManager {
         }
     }
 
-    public HashMap<Integer, Task> returnAllTask() {
+    public ArrayList<Task> returnAllTask() {
         //Возвращение всеx Task
-        return taskCollection;
+        ArrayList<Task> allTask = new ArrayList<>();
+        for (Task task : taskCollection.values()) {
+            allTask.add(task);
+        }
+        return allTask;
     }
 
-    public HashMap<Integer, Epic> returnAllEpic() {
+    public  ArrayList<Epic> returnAllEpic() {
         //Возвращение всех Epic
-        return epicCollection;
+        ArrayList<Epic> allEpic = new ArrayList<>();
+        for (Epic epic : epicCollection.values()) {
+            allEpic.add(epic);
+        }
+        return allEpic;
     }
 
-    public HashMap<Integer, SubTask> returnAllSubTask() {
+    public ArrayList<SubTask> returnAllSubTask() {
         //Вывод всех SubTask из всех Epic
-        return subTaskCollection;
+        ArrayList<SubTask> allSubTask = new ArrayList<>();
+        for (SubTask subTask : subTaskCollection.values()) {
+            allSubTask.add(subTask);
+        }
+        return allSubTask;
     }
 
     public void removeAllTask() {
@@ -181,7 +176,7 @@ public class TaskManager {
         taskCollection.remove(id);
     }
 
-    public void RemoveByIdEpic(int id) {
+    public void removeByIdEpic(int id) {
         //Удаление Epic по идентификатору
         epicCollection.remove(id);
         for (SubTask sb : subTaskCollection.values()) {
@@ -269,9 +264,10 @@ public class TaskManager {
         return statusProgress;
     }
 
-
-
-
+    private int setTaskId() {
+        counterGenerationId++;
+        return counterGenerationId;
+    }
 
 }
 
