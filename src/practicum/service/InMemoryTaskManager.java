@@ -24,6 +24,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTaskCollection = new HashMap<>();
     }
 
+
     @Override
     public void addTask(Task task) {
         //Добавление нового Task

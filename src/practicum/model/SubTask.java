@@ -11,6 +11,10 @@ public class SubTask extends Task {
         this.idParentTask = idParentTask;
     }
 
+    public SubTask(String name, String description, StatusProgress status) {
+        super(name, description, status);
+    }
+
     public int getIdParentTask() {
         return idParentTask;
     }
@@ -18,6 +22,7 @@ public class SubTask extends Task {
     public void setIdParentTask(int idParentTask) {
         this.idParentTask = idParentTask;
     }
+
 
     @Override
     public String toString() {
