@@ -15,6 +15,12 @@ public class SubTask extends Task {
         super(name, description, status);
     }
 
+    public SubTask(String name, String description, StatusProgress status, Integer id) {
+        super(name, description, status);
+        this.setId(id);
+    }
+
+
     public int getIdParentTask() {
         return idParentTask;
     }

@@ -13,10 +13,11 @@ import java.util.ArrayList;
 
 class TaskTest {
 
-    TaskManager taskManager = new InMemoryTaskManager();
+
 
     @Test
     void addNewTask() {
+        TaskManager taskManager = new InMemoryTaskManager();
         Task task = new Task("Test addNewTask", "Test addNewTask description", StatusProgress.NEW);
 
         taskManager.addTask(task);
@@ -37,6 +38,7 @@ class TaskTest {
 
     @Test
     void addTaskHeirsAndCompareThem() {
+        TaskManager taskManager = new InMemoryTaskManager();
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
         SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewEpic description", StatusProgress.NEW);
 
@@ -49,14 +51,36 @@ class TaskTest {
         final int taskIdSubTask = subTask.getId();
 
         final Task savedEpic = taskManager.getByIdEpic(taskIdEpic);
-        final Task savedSubTask = taskManager.getByIdEpic(taskIdEpic);
+        final Task savedSubTask = taskManager.getByIdEpic(taskIdSubTask);
 
         assertNotNull(epic, "Задача не найдена.");
         assertNotNull(subTask, "Задача не найдена.");
         assertEquals(epic, subTask, "Задачи не совпадают.");
+    }
 
+    @Test
+    void checkEpicAddToItself() {
+        TaskManager taskManager = new InMemoryTaskManager();
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
+        Epic epicUpdate = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.IN_PROGRESS);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewEpic description", StatusProgress.NEW);
 
+        taskManager.addEpic(epic);
+        taskManager.addSubTask(subTask);
 
+        epicUpdate.setId(1);
+        epic.setId(2);
 
+        taskManager.updateEpic(epicUpdate);
+
+        final int taskIdEpic = epic.getId();
+        final int taskIdSubTask = subTask.getId();
+
+        final Task savedEpic = taskManager.getByIdEpic(taskIdEpic);
+        final Task savedSubTask = taskManager.getByIdEpic(taskIdSubTask);
+
+        assertNotNull(epic, "Задача не найдена.");
+        assertNotNull(subTask, "Задача не найдена.");
+        assertNotEquals(epic, subTask, "Задачи не совпадают.");
     }
 }

@@ -30,7 +30,7 @@ public class Task {
         return id;
     }
 
-    public void setId(int id) {  // нужен для установки нового id
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -40,6 +40,12 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
+        if (o != null) {
+            if (o instanceof SubTask || o instanceof Epic) {
+                Task task = (Task) o;
+                return id == task.id;
+            }
+        }
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return id == task.id;
