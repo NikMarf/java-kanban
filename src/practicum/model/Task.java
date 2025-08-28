@@ -1,5 +1,6 @@
 package practicum.model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Task {
@@ -12,6 +13,13 @@ public class Task {
         this.name = name; // Поле имени
         this.description = description; // Поле описани
         this.status = status; // Поле статуса
+    }
+
+    public Task(String name, String description, StatusProgress status, int id) {
+        this.name = name; // Поле имени
+        this.description = description; // Поле описани
+        this.status = status; // Поле статуса
+        this.id = id; // Поле идентификатора
     }
 
     public String getName() {

@@ -100,6 +100,23 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public void updateEpic(Epic epic, int idEpic) {
+        // Обновление Epic
+        if (epicCollection.containsKey(idEpic)) {
+            epicCollection.put(idEpic, epic);
+            epic.setStatus(checkStatusEpicProgress(idEpic));
+        }
+    }
+
+    @Override
+    public void updateSubTask(SubTask subTask) {
+        // Обновление Epic
+        if (subTaskCollection.containsKey(subTask.getId())) {
+            subTaskCollection.put(subTask.getId(), subTask);
+        }
+    }
+
+    @Override
     public void updateSubTask(SubTask newSubTask, int idSubtask) {
         // Обновление SubTask в Epic
         ArrayList<Integer> repetittionsSubTask = new ArrayList<>();

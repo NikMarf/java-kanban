@@ -10,10 +10,12 @@ public interface TaskManager {
     void addTask(Task task);
     void addEpic(Epic epic);
     void addSubTask(SubTask subTask);
-
     void addSubTaskInEpic(SubTask newSubTask);
+
     void updateTask(Task task);
     void updateEpic(Epic epic);
+    void updateEpic(Epic epic, int idEpic);
+    public void updateSubTask(SubTask subTask);
     void updateSubTask(SubTask newSubTask, int idSubtask);
 
     ArrayList<Task> returnAllTask();

@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 class TaskTest {
 
-
-
     @Test
     void addNewTask() {
         TaskManager taskManager = new InMemoryTaskManager();
@@ -40,7 +38,8 @@ class TaskTest {
     void addTaskHeirsAndCompareThem() {
         TaskManager taskManager = new InMemoryTaskManager();
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewEpic description", StatusProgress.NEW);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewEpic description",
+                StatusProgress.NEW);
 
         taskManager.addEpic(epic);
         taskManager.addSubTask(subTask);
@@ -59,46 +58,55 @@ class TaskTest {
     }
 
     @Test
-    void checkEqualsIdWhenAddSubTaskInManager() {
+    void checkConflictGenIdAndManualId() {
         TaskManager taskManager = new InMemoryTaskManager();
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.NEW);
+        Task task = new Task("Test addNewTask", "Test addNewTask description",
+                StatusProgress.NEW);
+        Task newTask = new Task("Test addNewTask", "Test addNewTask description",
+                StatusProgress.NEW, 1);
 
-        taskManager.addEpic(epic);
-        subTask.setId(1);
-        taskManager.addSubTaskInEpic(subTask);
+        taskManager.addTask(task);
+        taskManager.addTask(newTask);
 
-        final int taskIdEpic = epic.getId();
-        final int taskIdSubTask = subTask.getId();
-
-        assertNotEquals(taskIdEpic, taskIdSubTask, "У epic и subTask одинаковые id");
+        assertNotEquals(task, newTask, "Конфликт двух Task с сгенерированным и ручным выставлением id");
     }
 
     @Test
-    void checkUpdateEpicWitchIdSubTask() {
+    void checkImmutabilityWhenAddInMemoryTaskManager() {
         TaskManager taskManager = new InMemoryTaskManager();
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.NEW);
-        SubTask updatesubTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.DONE, 2);
+        Task task = new Task("Test addNewTask", "Test addNewTask description", StatusProgress.NEW,
+                1);
 
-        taskManager.addEpic(epic);
-        taskManager.addSubTaskInEpic(subTask);
-        taskManager.updateSubTask(updatesubTask, 3);
+        String expectedName = task.getName();
+        String expectedDescription = task.getDescription();
+        StatusProgress expectedStatus = task.getStatus();
+        int expectedId = task.getId();
 
-        assertNotEquals(StatusProgress.DONE, taskManager.getByIdSubTaskTask(2).getStatus(), "Записался SubTask по несуществующему id");
+        taskManager.addTask(task);
+
+        assertEquals(expectedName, taskManager.getByIdTask(1).getName(), "Имя задачи изменилось");
+        assertEquals(expectedDescription, taskManager.getByIdTask(1).getDescription(),
+                "Описание задачи изменилось");
+        assertEquals(expectedStatus, taskManager.getByIdTask(1).getStatus(),
+                "Статус задачи изменился");
+        assertEquals(expectedId, taskManager.getByIdTask(1).getId(), "Id изменился");
     }
 
     @Test
-    void checkUpdateSubTaskWithNonExistentId() {
+    void checkHistoryManagerOnImmutabilityHistoryWhenUpdateTask() {
         TaskManager taskManager = new InMemoryTaskManager();
-        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.NEW);
-        SubTask updatesubTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.DONE, 2);
+        Task task = new Task("Test addNewTask", "Test addNewTask description", StatusProgress.NEW);
+        Task updateTask = new Task("Test addNewTask", "Test addNewTask description",
+                StatusProgress.DONE, 1);
 
-        taskManager.addEpic(epic);
-        taskManager.addSubTaskInEpic(subTask);
-        taskManager.updateSubTask(updatesubTask, 3);
+        taskManager.addTask(task);
+        taskManager.getByIdTask(1);
+        taskManager.updateTask(updateTask);
 
-        assertNotEquals(StatusProgress.DONE, taskManager.getByIdSubTaskTask(2).getStatus(), "Записался SubTask по несуществующему id");
+        assertNotEquals(taskManager.returnAllTask().get(0).getStatus(), taskManager.getHistory().get(0).getStatus(),
+                "История вызовов изменилась");
+
     }
+
+
 }

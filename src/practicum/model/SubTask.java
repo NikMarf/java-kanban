@@ -11,6 +11,11 @@ public class SubTask extends Task {
         this.idParentTask = idParentTask;
     }
 
+    public SubTask(String name, String description, StatusProgress status, int id, int idParentTask) {
+        super(name, description, status, id);
+        this.idParentTask = idParentTask;
+    }
+
     public SubTask(String name, String description, StatusProgress status) {
         super(name, description, status);
     }
