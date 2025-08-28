@@ -59,28 +59,46 @@ class TaskTest {
     }
 
     @Test
-    void checkEpicAddToItself() {
+    void checkEqualsIdWhenAddSubTaskInManager() {
         TaskManager taskManager = new InMemoryTaskManager();
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
-        Epic epicUpdate = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.IN_PROGRESS);
-        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewEpic description", StatusProgress.NEW);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.NEW);
 
         taskManager.addEpic(epic);
-        taskManager.addSubTask(subTask);
-
-        epicUpdate.setId(1);
-        epic.setId(2);
-
-        taskManager.updateEpic(epicUpdate);
+        subTask.setId(1);
+        taskManager.addSubTaskInEpic(subTask);
 
         final int taskIdEpic = epic.getId();
         final int taskIdSubTask = subTask.getId();
 
-        final Task savedEpic = taskManager.getByIdEpic(taskIdEpic);
-        final Task savedSubTask = taskManager.getByIdEpic(taskIdSubTask);
+        assertNotEquals(taskIdEpic, taskIdSubTask, "У epic и subTask одинаковые id");
+    }
 
-        assertNotNull(epic, "Задача не найдена.");
-        assertNotNull(subTask, "Задача не найдена.");
-        assertNotEquals(epic, subTask, "Задачи не совпадают.");
+    @Test
+    void checkUpdateEpicWitchIdSubTask() {
+        TaskManager taskManager = new InMemoryTaskManager();
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.NEW);
+        SubTask updatesubTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.DONE, 2);
+
+        taskManager.addEpic(epic);
+        taskManager.addSubTaskInEpic(subTask);
+        taskManager.updateSubTask(updatesubTask, 3);
+
+        assertNotEquals(StatusProgress.DONE, taskManager.getByIdSubTaskTask(2).getStatus(), "Записался SubTask по несуществующему id");
+    }
+
+    @Test
+    void checkUpdateSubTaskWithNonExistentId() {
+        TaskManager taskManager = new InMemoryTaskManager();
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
+        SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.NEW);
+        SubTask updatesubTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description", StatusProgress.DONE, 2);
+
+        taskManager.addEpic(epic);
+        taskManager.addSubTaskInEpic(subTask);
+        taskManager.updateSubTask(updatesubTask, 3);
+
+        assertNotEquals(StatusProgress.DONE, taskManager.getByIdSubTaskTask(2).getStatus(), "Записался SubTask по несуществующему id");
     }
 }
