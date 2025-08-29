@@ -5,4 +5,9 @@ public class Manager {
         TaskManager defaultManager = new InMemoryTaskManager();
         return defaultManager;
     }
+
+    public HistoryManager getDefaultHistory() {
+        HistoryManager defaultHistoryManager = new  InMemoryHistoryManager();
+        return defaultHistoryManager;
+    }
 }

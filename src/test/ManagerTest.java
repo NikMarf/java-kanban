@@ -4,6 +4,7 @@ import practicum.model.Task;
 import practicum.model.Epic;
 
 import org.junit.jupiter.api.Test;
+import practicum.service.HistoryManager;
 import practicum.service.InMemoryTaskManager;
 import practicum.service.Manager;
 import practicum.service.TaskManager;
@@ -16,6 +17,13 @@ public class ManagerTest {
         Manager manager = new Manager();
         TaskManager taskManager = manager.getDefault();
         assertNotNull(taskManager, "Менеджер задач не должен быть null");
+    }
+
+    @Test
+    void checkReturnManagerHistoryReady() {
+        Manager manager = new Manager();
+        HistoryManager historyManager = manager.getDefaultHistory();
+        assertNotNull(historyManager, "Менеджер задач не должен быть null");
     }
 
     @Test
