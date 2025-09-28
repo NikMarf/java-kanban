@@ -183,6 +183,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeAllTask() {
         //Удаление всеx Task
         taskCollection.clear();
+
     }
 
     @Override
@@ -207,6 +208,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeByIdTask(int id) {
         //Удаление Task по идентификатору
         taskCollection.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -218,6 +220,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subTaskCollection.remove(sb.getId());
             }
         }
+        historyManager.remove(id);
     }
 
     @Override
@@ -233,7 +236,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         }
-
+        historyManager.remove(id);
     }
 
     @Override
