@@ -77,7 +77,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
 
-        for(Epic epic : epicCollection.values()) {
+        for (Epic epic : epicCollection.values()) {
             for (int j = 0; j < epic.getSubTasks().size(); j++) {
                 if (j < epic.getSubTasks().size() - 1) {
                     if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
@@ -132,7 +132,7 @@ public class InMemoryTaskManager implements TaskManager {
         // Обновление SubTask в Epic
         ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
 
-        for(Epic epic : epicCollection.values()) {
+        for (Epic epic : epicCollection.values()) {
             int i;
 
             for (i = 0; i < epic.getSubTasks().size(); i++) {
@@ -240,7 +240,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeByIsSubTask(int id) {
         //Удаление SubTask по идентификатору из всех Epic
         subTaskCollection.remove(id);
-        for(Epic epic : epicCollection.values()) {
+        for (Epic epic : epicCollection.values()) {
             int i;
 
             for (i = 0; i < epic.getSubTasks().size(); i++) {
