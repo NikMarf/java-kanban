@@ -1,7 +1,5 @@
 package practicum.model;
 
-import practicum.service.InMemoryTaskManager;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Task {

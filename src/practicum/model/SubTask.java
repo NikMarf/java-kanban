@@ -1,7 +1,5 @@
 package practicum.model;
 
-import java.util.Objects;
-
 public class SubTask extends Task {
 
     private int idParentTask; //Поле хранения идентификатора родителя

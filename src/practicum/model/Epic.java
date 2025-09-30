@@ -1,7 +1,6 @@
 package practicum.model;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Epic extends Task {
 
@@ -20,8 +19,6 @@ public class Epic extends Task {
     public ArrayList<SubTask> getSubTasks() {
         return subTasks;
     }
-
-
 
     @Override
     public String toString() {
