@@ -78,7 +78,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         for(Epic epic : epicCollection.values()) {
-
             for (int j = 0; j < epic.getSubTasks().size(); j++) {
                 if (j < epic.getSubTasks().size() - 1) {
                     if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
@@ -86,7 +85,6 @@ public class InMemoryTaskManager implements TaskManager {
                     }
                 }
             }
-
             if (!repetittionsSubTask.isEmpty()) {
                 for (Integer rep : repetittionsSubTask) {
                     epic.getSubTasks().remove((int) rep);
@@ -136,6 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         for(Epic epic : epicCollection.values()) {
             int i;
+
             for (i = 0; i < epic.getSubTasks().size(); i++) {
                 if (epic.getSubTasks().get(i).getId() == idSubtask) {
                     newSubTask.setIdParentTask(epic.getId());
@@ -149,7 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (i = 0; i < epic.getSubTasks().size(); i++) {
                 for (int j = i; j < epic.getSubTasks().size(); j++) {
                     if (j < epic.getSubTasks().size() - 1) {
-                        if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j+1))) {
+                        if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
                             repetittionsSubTask.add(j + 1);
                         }
                     }
@@ -243,6 +242,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTaskCollection.remove(id);
         for(Epic epic : epicCollection.values()) {
             int i;
+
             for (i = 0; i < epic.getSubTasks().size(); i++) {
                 if (epic.getSubTasks().get(i).getId() == id) {
                     epic.getSubTasks().remove(i);
