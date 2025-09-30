@@ -1,9 +1,8 @@
-import practicum.model.Epic;
-import practicum.model.SubTask;
+
 import practicum.model.Task;
 import practicum.service.InMemoryTaskManager;
 import practicum.service.TaskManager;
-import practicum.model.StatusProgress;
+
 
 public class Main {
     public static void main(String[] args) {
