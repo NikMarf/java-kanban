@@ -67,6 +67,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         tail = node;
 
     }
+
     public ArrayList<Task> getTasks() {
         listHistory.clear();
         for (Node<Task> x = head; x != null; x = x.next) {
