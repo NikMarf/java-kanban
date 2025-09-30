@@ -18,6 +18,18 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicCollection;
     private HashMap<Integer, SubTask> subTaskCollection;
 
+    public HashMap<Integer, Task> getTaskCollection() {
+        return taskCollection;
+    }
+
+    public HashMap<Integer, Epic> getEpicCollection() {
+        return epicCollection;
+    }
+
+    public HashMap<Integer, SubTask> getSubTaskCollection() {
+        return subTaskCollection;
+    }
+
     public InMemoryTaskManager() {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
