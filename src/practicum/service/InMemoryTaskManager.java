@@ -256,21 +256,27 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getByIdTask(int idOutput) {
         //Возвращение конретного Task
-        historyManager.add(taskCollection.get(idOutput));
+        if (taskCollection.get(idOutput) != null) {
+            historyManager.add(taskCollection.get(idOutput));
+        }
         return taskCollection.get(idOutput);
     }
 
     @Override
     public Epic getByIdEpic(int idOutput) {
         //Возвращение конретного Epic
-        historyManager.add(epicCollection.get(idOutput));
+        if (epicCollection.get(idOutput) != null) {
+            historyManager.add(epicCollection.get(idOutput));
+        }
         return epicCollection.get(idOutput);
     }
 
     @Override
     public SubTask getByIdSubTaskTask(int idOutput) {
         //Возвращение конретного SubTask
-        historyManager.add(subTaskCollection.get(idOutput));
+        if (subTaskCollection.get(idOutput) != null) {
+            historyManager.add(subTaskCollection.get(idOutput));
+        }
         return subTaskCollection.get(idOutput);
     }
 
