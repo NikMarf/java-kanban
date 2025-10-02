@@ -1,12 +1,12 @@
 package practicum.service;
 
 import practicum.model.Task;
-import java.util.ArrayList;
+import java.util.List;
 
 public interface HistoryManager {
-
-    static final int HISTORY_LIMIT = 10;
-
     void add(Task task);
-    ArrayList<Task> getHistory();
+
+    void remove(int id);
+
+    List<Task> getHistory();
 }

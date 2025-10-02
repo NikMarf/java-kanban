@@ -18,6 +18,18 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicCollection;
     private HashMap<Integer, SubTask> subTaskCollection;
 
+    public HashMap<Integer, Task> getTaskCollection() {
+        return taskCollection;
+    }
+
+    public HashMap<Integer, Epic> getEpicCollection() {
+        return epicCollection;
+    }
+
+    public HashMap<Integer, SubTask> getSubTaskCollection() {
+        return subTaskCollection;
+    }
+
     public InMemoryTaskManager() {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
@@ -64,8 +76,8 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.setStatus(checkStatusEpicProgress(epic.getId()));
             }
         }
-        for(Epic epic : epicCollection.values()) {
 
+        for (Epic epic : epicCollection.values()) {
             for (int j = 0; j < epic.getSubTasks().size(); j++) {
                 if (j < epic.getSubTasks().size() - 1) {
                     if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
@@ -73,7 +85,6 @@ public class InMemoryTaskManager implements TaskManager {
                     }
                 }
             }
-
             if (!repetittionsSubTask.isEmpty()) {
                 for (Integer rep : repetittionsSubTask) {
                     epic.getSubTasks().remove((int) rep);
@@ -120,13 +131,15 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateSubTask(SubTask newSubTask, int idSubtask) {
         // Обновление SubTask в Epic
         ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
-        for(Epic epic : epicCollection.values()) {
+
+        for (Epic epic : epicCollection.values()) {
             int i;
+
             for (i = 0; i < epic.getSubTasks().size(); i++) {
                 if (epic.getSubTasks().get(i).getId() == idSubtask) {
                     newSubTask.setIdParentTask(epic.getId());
                     epic.getSubTasks().add(i, newSubTask);
-                    epic.getSubTasks().remove(i+1);
+                    epic.getSubTasks().remove(i + 1);
                 }
             }
 
@@ -135,8 +148,8 @@ public class InMemoryTaskManager implements TaskManager {
             for (i = 0; i < epic.getSubTasks().size(); i++) {
                 for (int j = i; j < epic.getSubTasks().size(); j++) {
                     if (j < epic.getSubTasks().size() - 1) {
-                        if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j+1))) {
-                            repetittionsSubTask.add(j+1);
+                        if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
+                            repetittionsSubTask.add(j + 1);
                         }
                     }
                 }
@@ -183,6 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeAllTask() {
         //Удаление всеx Task
         taskCollection.clear();
+
     }
 
     @Override
@@ -207,6 +221,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeByIdTask(int id) {
         //Удаление Task по идентификатору
         taskCollection.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -218,14 +233,16 @@ public class InMemoryTaskManager implements TaskManager {
                 subTaskCollection.remove(sb.getId());
             }
         }
+        historyManager.remove(id);
     }
 
     @Override
     public void removeByIsSubTask(int id) {
         //Удаление SubTask по идентификатору из всех Epic
         subTaskCollection.remove(id);
-        for(Epic epic : epicCollection.values()) {
+        for (Epic epic : epicCollection.values()) {
             int i;
+
             for (i = 0; i < epic.getSubTasks().size(); i++) {
                 if (epic.getSubTasks().get(i).getId() == id) {
                     epic.getSubTasks().remove(i);
@@ -233,27 +250,33 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         }
-
+        historyManager.remove(id);
     }
 
     @Override
     public Task getByIdTask(int idOutput) {
         //Возвращение конретного Task
-        historyManager.add(taskCollection.get(idOutput));
+        if (taskCollection.get(idOutput) != null) {
+            historyManager.add(taskCollection.get(idOutput));
+        }
         return taskCollection.get(idOutput);
     }
 
     @Override
     public Epic getByIdEpic(int idOutput) {
         //Возвращение конретного Epic
-        historyManager.add(epicCollection.get(idOutput));
+        if (epicCollection.get(idOutput) != null) {
+            historyManager.add(epicCollection.get(idOutput));
+        }
         return epicCollection.get(idOutput);
     }
 
     @Override
     public SubTask getByIdSubTaskTask(int idOutput) {
         //Возвращение конретного SubTask
-        historyManager.add(subTaskCollection.get(idOutput));
+        if (subTaskCollection.get(idOutput) != null) {
+            historyManager.add(subTaskCollection.get(idOutput));
+        }
         return subTaskCollection.get(idOutput);
     }
 

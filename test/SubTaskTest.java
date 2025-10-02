@@ -56,15 +56,16 @@ public class SubTaskTest {
         TaskManager taskManager = new InMemoryTaskManager();
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description", StatusProgress.NEW);
         SubTask subTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description",
-                StatusProgress.NEW);
+                StatusProgress.NEW, 1);
         SubTask updatesubTask = new SubTask("Test addNewSubTask", "Test addNewSubTask description",
-                StatusProgress.DONE, 2);
+                StatusProgress.DONE, 1);
 
         taskManager.addEpic(epic);
         taskManager.addSubTaskInEpic(subTask);
+        //taskManager.addSubTaskInEpic(updatesubTask);
         taskManager.updateSubTask(updatesubTask, 3);
 
-        assertNotEquals(StatusProgress.DONE, taskManager.getByIdSubTaskTask(2).getStatus(),
+        assertNotEquals(StatusProgress.DONE, taskManager.getByIdEpic(1).getStatus(),
                 "Записался новый SubTask по несуществующему id");
         assertNull(taskManager.getByIdSubTaskTask(3), "Записался SubTask по несуществующему id");
     }

@@ -1,7 +1,6 @@
 package practicum.model;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Epic extends Task {
 
