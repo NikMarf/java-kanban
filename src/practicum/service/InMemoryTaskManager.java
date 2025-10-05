@@ -30,10 +30,16 @@ public class InMemoryTaskManager implements TaskManager {
         return subTaskCollection;
     }
 
+    private static final String FILE_MEMORY_NAME = "csvTaskMemory.csv";
+    private static final String DIR_FILE = System.getProperty("user.dir").concat("\\").concat(FILE_MEMORY_NAME);
+
+
     public InMemoryTaskManager() {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
         subTaskCollection = new HashMap<>();
+
+        System.out.println(DIR_FILE);
     }
 
 

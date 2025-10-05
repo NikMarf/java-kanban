@@ -30,4 +30,10 @@ public class Epic extends Task {
                 ", id=" + getId() +
                 '}';
     }
+
+    @Override
+    public String toStringSave() {
+        return super.getId() + "," + TaskFields.EPIC + "," + super.getName() + "," +
+                super.getStatus() + "," + super.getDescription() + "/n";
+    }
 }
