@@ -15,13 +15,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static final String DIR = System.getProperty("user.dir");
     private static final String FILE_MEMORY_NAME = "csvTaskMemory.csv";
-    public TaskManager Memory;
 
     public FileBackedTaskManager() throws ManagerSaveException  {
         Path path = Paths.get(DIR, FILE_MEMORY_NAME);
         try {
             Files.createFile(path);
-            System.out.println("Создан файл памяти: " + DIR);
+            System.out.println("Создан файл памяти в директории: " + DIR);
         } catch (IOException e) {
             System.out.println("Файл памяти уже существует");
             FileBackedTaskManager loadManager = loadFromFile(path.toFile());
@@ -32,14 +31,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public FileBackedTaskManager(File file) throws ManagerSaveException {
-        Path path = Paths.get(DIR, FILE_MEMORY_NAME);
-        try {
-            Files.createFile(path);
-            System.out.println("Загрузка файла памяти: " + DIR);
-        } catch (IOException e) {
-            System.out.println("Файл памяти уже существует");
-        }
+    public FileBackedTaskManager(File file) {
+        System.out.println("Загрузка файла памяти: " + file.getPath());
     }
 
     @Override
@@ -55,6 +48,136 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public HashMap<Integer, SubTask> getSubTaskCollection() {
         return super.getSubTaskCollection();
+    }
+
+    @Override
+    public void addTask(Task task) {
+        super.addTask(task);
+        save();
+    }
+
+    @Override
+    public void addEpic(Epic epic) {
+        super.addEpic(epic);
+        save();
+    }
+
+    @Override
+    public void addSubTask(SubTask subTask) {
+        super.addSubTask(subTask);
+        save();
+    }
+
+    @Override
+    public void addSubTaskInEpic(SubTask newSubTask) {
+        super.addSubTaskInEpic(newSubTask);
+        save();
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        super.updateTask(task);
+        save();
+    }
+
+    @Override
+    public void updateEpic(Epic epic) {
+        super.updateEpic(epic);
+        save();
+    }
+
+    @Override
+    public void updateEpic(Epic epic, int idEpic) {
+        super.updateEpic(epic, idEpic);
+        save();
+    }
+
+    @Override
+    public void updateSubTask(SubTask subTask) {
+        super.updateSubTask(subTask);
+        save();
+    }
+
+    @Override
+    public void updateSubTask(SubTask newSubTask, int idSubtask) {
+        super.updateSubTask(newSubTask, idSubtask);
+        save();
+    }
+
+    @Override
+    public ArrayList<Task> returnAllTask() {
+        return super.returnAllTask();
+    }
+
+    @Override
+    public ArrayList<Epic> returnAllEpic() {
+        return super.returnAllEpic();
+    }
+
+    @Override
+    public ArrayList<SubTask> returnAllSubTask() {
+        return super.returnAllSubTask();
+    }
+
+    @Override
+    public void removeAllTask() {
+        super.removeAllTask();
+        save();
+    }
+
+    @Override
+    public void removeAllEpic() {
+        super.removeAllEpic();
+        save();
+    }
+
+    @Override
+    public void removeAllSubTask() {
+        super.removeAllSubTask();
+        save();
+    }
+
+    @Override
+    public void removeByIdTask(int id) {
+        super.removeByIdTask(id);
+        save();
+    }
+
+    @Override
+    public void removeByIdEpic(int id) {
+        super.removeByIdEpic(id);
+        save();
+    }
+
+    @Override
+    public void removeByIsSubTask(int id) {
+        super.removeByIsSubTask(id);
+        save();
+    }
+
+    @Override
+    public Task getByIdTask(int idOutput) {
+        return super.getByIdTask(idOutput);
+    }
+
+    @Override
+    public Epic getByIdEpic(int idOutput) {
+        return super.getByIdEpic(idOutput);
+    }
+
+    @Override
+    public SubTask getByIdSubTaskTask(int idOutput) {
+        return super.getByIdSubTaskTask(idOutput);
+    }
+
+    @Override
+    public ArrayList<SubTask> outputByIdSubTask(int idOutputEpicOrSubTask) {
+        return super.outputByIdSubTask(idOutputEpicOrSubTask);
+    }
+
+    @Override
+    public ArrayList<Task> getHistory() {
+        return super.getHistory();
     }
 
     private void save() {
@@ -163,127 +286,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Ошибка чтения файла", e);
         }
         return backedTaskManager;
-    }
-
-    @Override
-    public void addTask(Task task) {
-        super.addTask(task);
-        save();
-    }
-
-    @Override
-    public void addEpic(Epic epic) {
-        super.addEpic(epic);
-        save();
-    }
-
-    @Override
-    public void addSubTask(SubTask subTask) {
-        super.addSubTask(subTask);
-        save();
-    }
-
-    @Override
-    public void addSubTaskInEpic(SubTask newSubTask) {
-        super.addSubTaskInEpic(newSubTask);
-        save();
-    }
-
-    @Override
-    public void updateTask(Task task) {
-        super.updateTask(task);
-        save();
-    }
-
-    @Override
-    public void updateEpic(Epic epic) {
-        super.updateEpic(epic);
-    }
-
-    @Override
-    public void updateEpic(Epic epic, int idEpic) {
-        super.updateEpic(epic, idEpic);
-    }
-
-    @Override
-    public void updateSubTask(SubTask subTask) {
-        super.updateSubTask(subTask);
-    }
-
-    @Override
-    public void updateSubTask(SubTask newSubTask, int idSubtask) {
-        super.updateSubTask(newSubTask, idSubtask);
-    }
-
-    @Override
-    public ArrayList<Task> returnAllTask() {
-        return super.returnAllTask();
-    }
-
-    @Override
-    public ArrayList<Epic> returnAllEpic() {
-        return super.returnAllEpic();
-
-    }
-
-    @Override
-    public ArrayList<SubTask> returnAllSubTask() {
-        return super.returnAllSubTask();
-    }
-
-    @Override
-    public void removeAllTask() {
-        super.removeAllTask();
-    }
-
-    @Override
-    public void removeAllEpic() {
-        super.removeAllEpic();
-    }
-
-    @Override
-    public void removeAllSubTask() {
-        super.removeAllSubTask();
-    }
-
-    @Override
-    public void removeByIdTask(int id) {
-        super.removeByIdTask(id);
-    }
-
-    @Override
-    public void removeByIdEpic(int id) {
-        super.removeByIdEpic(id);
-    }
-
-    @Override
-    public void removeByIsSubTask(int id) {
-        super.removeByIsSubTask(id);
-    }
-
-    @Override
-    public Task getByIdTask(int idOutput) {
-        return getByIdTask(idOutput);
-    }
-
-    @Override
-    public Epic getByIdEpic(int idOutput) {
-        return getByIdEpic(idOutput);
-    }
-
-    @Override
-    public SubTask getByIdSubTaskTask(int idOutput) {
-        return super.getByIdSubTaskTask(idOutput);
-    }
-
-    @Override
-    public ArrayList<SubTask> outputByIdSubTask(int idOutputEpicOrSubTask) {
-        return super.outputByIdSubTask(idOutputEpicOrSubTask);
-    }
-
-    @Override
-    public ArrayList<Task> getHistory() {
-        return super.getHistory();
     }
 
 

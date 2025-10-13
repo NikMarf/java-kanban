@@ -9,11 +9,13 @@ import practicum.service.InMemoryTaskManager;
 import practicum.service.Manager;
 import practicum.service.TaskManager;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManagerTest {
     @Test
-    void checkReturnManagerReady() {
+    void checkReturnManagerReady() throws IOException {
         Manager manager = new Manager();
         TaskManager taskManager = manager.getDefault();
         assertNotNull(taskManager, "Менеджер задач не должен быть null");
@@ -168,6 +170,7 @@ public class ManagerTest {
                 "В Epic присутствует неактуальное значение Id");
 
     }
+
 
 }
 
