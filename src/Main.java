@@ -1,6 +1,3 @@
-import practicum.model.Epic;
-import practicum.model.StatusProgress;
-import practicum.model.SubTask;
 import practicum.model.Task;
 import practicum.service.FileBackedTaskManager;
 import practicum.service.InMemoryTaskManager;
@@ -13,10 +10,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         TaskManager manager = new InMemoryTaskManager();
         TaskManager managerSave = new FileBackedTaskManager();
-
-
         printAllTasks(managerSave);
-
     }
 
     private static void printAllTasks(TaskManager manager) {

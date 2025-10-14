@@ -15,14 +15,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static final String DIR = System.getProperty("user.dir");
     private static final String FILE_MEMORY_NAME = "csvTaskMemory.csv";
+    private static boolean isNotCallConstructorFile = true;
 
-    public FileBackedTaskManager() throws ManagerSaveException  {
+    public FileBackedTaskManager()  {
         Path path = Paths.get(DIR, FILE_MEMORY_NAME);
         try {
             Files.createFile(path);
             System.out.println("Создан файл памяти в директории: " + DIR);
         } catch (IOException e) {
             System.out.println("Файл памяти уже существует");
+            isNotCallConstructorFile = false;
             FileBackedTaskManager loadManager = loadFromFile(path.toFile());
             setTaskCollection(loadManager.getTaskCollection());
             setEpicCollection(loadManager.getEpicCollection());
@@ -31,8 +33,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
+    public FileBackedTaskManager(File file, boolean isNotCallConstructorFlag) {
+        if (isNotCallConstructorFlag) {
+            FileBackedTaskManager loadManager = loadFromFile(file);
+            setTaskCollection(loadManager.getTaskCollection());
+            setEpicCollection(loadManager.getEpicCollection());
+            setSubTaskCollection(loadManager.getSubTaskCollection());
+            setHistoryManager(loadManager.getHistoryManager());
+        }
+    }
+
     public FileBackedTaskManager(File file) {
-        System.out.println("Загрузка файла памяти: " + file.getPath());
+            isNotCallConstructorFile = false;
+            FileBackedTaskManager loadManager = loadFromFile(file);
+            setTaskCollection(loadManager.getTaskCollection());
+            setEpicCollection(loadManager.getEpicCollection());
+            setSubTaskCollection(loadManager.getSubTaskCollection());
+            setHistoryManager(loadManager.getHistoryManager());
+            System.out.println("Загрузка файла памяти: " + file.getPath());
     }
 
     @Override
@@ -255,7 +273,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private static FileBackedTaskManager loadFromFile(File file) {
-        FileBackedTaskManager backedTaskManager = new FileBackedTaskManager(file);
+        FileBackedTaskManager backedTaskManager = new FileBackedTaskManager(file, isNotCallConstructorFile);
         try (BufferedReader loadMemory = new BufferedReader(new FileReader(file))) {
             while (loadMemory.ready()) {
                 String str = loadMemory.readLine();
@@ -287,6 +305,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         return backedTaskManager;
     }
-
-
 }

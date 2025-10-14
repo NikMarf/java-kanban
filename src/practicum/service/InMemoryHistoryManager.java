@@ -5,7 +5,6 @@ import practicum.model.Node;
 
 import java.util.*;
 
-
 public class InMemoryHistoryManager implements HistoryManager {
 
     public ArrayList<Task> listHistory = new ArrayList<>();

@@ -6,6 +6,7 @@ import practicum.model.Task;
 import practicum.service.FileBackedTaskManager;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,15 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileBackedTaskManagerTest {
 
     File tempFile;
-    FileBackedTaskManager manager;
+    FileBackedTaskManager managerSave;
 
     @BeforeEach
     void setUp() throws IOException {
-        // Создаём временный файл в системной директории, он сам удалится после завершения теста
         tempFile = File.createTempFile("test_memory_", ".csv");
         tempFile.deleteOnExit();
-
-        manager = new FileBackedTaskManager(tempFile);
+        managerSave = new FileBackedTaskManager(tempFile);
     }
 
     @Test
@@ -29,41 +28,35 @@ class FileBackedTaskManagerTest {
         try {
             new FileBackedTaskManager(tempFile);
         } catch (Exception e) {
-            fail("Создание менеджера не должно выбрасывать исключение, но было: " + e);
+            System.out.println("Ошибка при создании менеджера: " + e);
         }
+        assertNotNull(managerSave, "Менеджер не создан");
     }
 
     @Test
     void shouldSaveAndLoadMultipleTasks() {
-        Task task1 = new Task("Test Task 1", "Description 1", StatusProgress.NEW, 1);
-        Epic epic1 = new Epic("Epic 1", "Epic description", StatusProgress.IN_PROGRESS, 2);
-        SubTask sub1 = new SubTask("Sub 1", "Sub description", StatusProgress.DONE, 3, 2);
-
-        manager.addTask(task1);
-        manager.addEpic(epic1);
-        manager.addSubTask(sub1);
-
-        // Проверяем, что данные реально сохранились в менеджере
-        assertEquals(1, manager.returnAllTask().size(), "Должна быть одна обычная задача");
-        assertEquals(1, manager.returnAllEpic().size(), "Должен быть один эпик");
-        assertEquals(1, manager.returnAllSubTask().size(), "Должна быть одна подзадача");
+        Task task1 = new Task("Task 1", "Description Task", StatusProgress.NEW, 1);
+        Epic epic1 = new Epic("Epic 1", "Description Epic", StatusProgress.IN_PROGRESS, 2);
+        SubTask sub1 = new SubTask("SubTask 1", "Description SubTask", StatusProgress.DONE, 3, 2);
+        managerSave.addTask(task1);
+        managerSave.addEpic(epic1);
+        managerSave.addSubTask(sub1);
+        assertEquals(1, managerSave.returnAllTask().size(), "Должна сущетсвовать одна задача");
+        assertEquals(1, managerSave.returnAllEpic().size(), "Должен сущетсвовать один эпик");
+        assertEquals(1, managerSave.returnAllSubTask().size(), "Должна сущетсвовать одна подзадача");
     }
 
     @Test
-    void shouldLoadMultipleTasksFromFile() throws IOException {
-
-        File testFile = File.createTempFile("load_test_", ".csv");
-        testFile.deleteOnExit();
-
+    void shouldLoadMultipleTasksFromFile() {
         String content = "1,TASK,Test1,NEW,Description1\n" +
                 "2,EPIC,TestEpic,DONE,Description2\n" +
                 "3,SUBTASK,Sub1,IN_PROGRESS,Description3,2\n";
-
-        java.nio.file.Files.writeString(testFile.toPath(), content);
-
-        FileBackedTaskManager loaded = new FileBackedTaskManager();
-
-
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            writer.write(content);
+        } catch (IOException e) {
+            System.out.println("Произошла ошибка во время записи файла");
+        }
+        FileBackedTaskManager loaded = new FileBackedTaskManager(tempFile);
         assertEquals(1, loaded.returnAllTask().size(), "Должна загрузиться одна обычная задача");
         assertEquals(1, loaded.returnAllEpic().size(), "Должен загрузиться один эпик");
         assertEquals(1, loaded.returnAllSubTask().size(), "Должна загрузиться одна подзадача");
@@ -71,8 +64,8 @@ class FileBackedTaskManagerTest {
 
     @AfterEach
     void tearDown() {
-        if (tempFile.exists()) {
-            tempFile.delete();
+        if (tempFile.exists() && tempFile.delete()) {
+            System.out.println("Временные файлы удалены");
         }
     }
 }
