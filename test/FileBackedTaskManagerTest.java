@@ -48,9 +48,9 @@ class FileBackedTaskManagerTest {
 
     @Test
     void shouldLoadMultipleTasksFromFile() {
-        String content = "1,TASK,Test1,NEW,Description1\n" +
+        String content = "1,TASK,TestTask,NEW,Description1\n" +
                 "2,EPIC,TestEpic,DONE,Description2\n" +
-                "3,SUBTASK,Sub1,IN_PROGRESS,Description3,2\n";
+                "3,SUBTASK,TestSubTask,IN_PROGRESS,Description3,2\n";
         try (FileWriter writer = new FileWriter(tempFile)) {
             writer.write(content);
         } catch (IOException e) {
