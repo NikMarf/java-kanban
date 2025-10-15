@@ -56,7 +56,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addTask(Task task) {
         //Добавление нового Task
-        if (task.getId() != 0) {
+        if (task.getId() != 0 && !taskCollection.containsKey(task.getId())) {
             taskCollection.put(task.getId(), task);
         } else {
             int id = setTaskId();
@@ -68,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addEpic(Epic epic) {
         //Добавление нового Epic
-        if (epic.getId() != 0) {
+        if (epic.getId() != 0 || !epicCollection.containsKey(epic.getId())) {
             epicCollection.put(epic.getId(), epic);
             epic.setStatus(checkStatusEpicProgress(epic.getId()));
         } else {
@@ -81,7 +81,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubTask(SubTask subTask) {
-        if (subTask.getId() != 0) {
+        if (subTask.getId() != 0 && !subTaskCollection.containsKey(subTask.getId())) {
             subTaskCollection.put(subTask.getId(), subTask);
         } else {
             int id = setTaskId();
