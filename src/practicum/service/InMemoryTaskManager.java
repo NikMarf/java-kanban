@@ -68,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addEpic(Epic epic) {
         //Добавление нового Epic
-        if (epic.getId() != 0 || !epicCollection.containsKey(epic.getId())) {
+        if (epic.getId() != 0 && !epicCollection.containsKey(epic.getId())) {
             epicCollection.put(epic.getId(), epic);
             epic.setStatus(checkStatusEpicProgress(epic.getId()));
         } else {
