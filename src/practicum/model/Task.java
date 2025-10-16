@@ -83,4 +83,8 @@ public class Task {
                 ", id=" + id +
                 '}';
     }
+
+    public String toStringSave() {
+        return id + "," + TaskFields.TASK + "," + name + "," + status + "," + description + "/n";
+    }
 }

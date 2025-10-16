@@ -1,9 +1,6 @@
 package practicum.service;
 
-import practicum.model.Epic;
-import practicum.model.StatusProgress;
-import practicum.model.SubTask;
-import practicum.model.Task;
+import practicum.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,35 +27,67 @@ public class InMemoryTaskManager implements TaskManager {
         return subTaskCollection;
     }
 
+    public InMemoryHistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    public void setTaskCollection(HashMap<Integer, Task> taskCollection) {
+        this.taskCollection = taskCollection;
+    }
+
+    public void setEpicCollection(HashMap<Integer, Epic> epicCollection) {
+        this.epicCollection = epicCollection;
+    }
+
+    public void setSubTaskCollection(HashMap<Integer, SubTask> subTaskCollection) {
+        this.subTaskCollection = subTaskCollection;
+    }
+
+    public void setHistoryManager(InMemoryHistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
+
     public InMemoryTaskManager() {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
         subTaskCollection = new HashMap<>();
     }
 
-
     @Override
     public void addTask(Task task) {
         //Добавление нового Task
-        int id = setTaskId();
-        task.setId(id);
-        taskCollection.put(task.getId(), task);
+        if (task.getId() != 0 && !taskCollection.containsKey(task.getId())) {
+            taskCollection.put(task.getId(), task);
+        } else {
+            int id = setTaskId();
+            task.setId(id);
+            taskCollection.put(task.getId(), task);
+        }
     }
 
     @Override
     public void addEpic(Epic epic) {
         //Добавление нового Epic
-        int id = setTaskId();
-        epic.setId(id);
-        epicCollection.put(epic.getId(), epic);
-        epic.setStatus(checkStatusEpicProgress(epic.getId()));
+        if (epic.getId() != 0 && !epicCollection.containsKey(epic.getId())) {
+            epicCollection.put(epic.getId(), epic);
+            epic.setStatus(checkStatusEpicProgress(epic.getId()));
+        } else {
+            int id = setTaskId();
+            epic.setId(id);
+            epicCollection.put(epic.getId(), epic);
+            epic.setStatus(checkStatusEpicProgress(epic.getId()));
+        }
     }
 
     @Override
     public void addSubTask(SubTask subTask) {
-        int id = setTaskId();
-        subTask.setId(id);
-        subTaskCollection.put(subTask.getId(), subTask);
+        if (subTask.getId() != 0 && !subTaskCollection.containsKey(subTask.getId())) {
+            subTaskCollection.put(subTask.getId(), subTask);
+        } else {
+            int id = setTaskId();
+            subTask.setId(id);
+            subTaskCollection.put(subTask.getId(), subTask);
+        }
     }
 
     @Override
@@ -306,7 +335,6 @@ public class InMemoryTaskManager implements TaskManager {
         return idParentSubTask;
     }
 
-
     private StatusProgress checkStatusEpicProgress(int id) {
         //Присвоение статуса Epic
         Epic epic = epicCollection.get(id);
@@ -331,7 +359,6 @@ public class InMemoryTaskManager implements TaskManager {
 
             }
         }
-
         return statusProgress;
     }
 

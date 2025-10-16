@@ -37,4 +37,10 @@ public class SubTask extends Task {
                 ", idParentTask=" + idParentTask +
                 '}';
     }
+
+    @Override
+    public String toStringSave() {
+        return super.getId() + "," + TaskFields.SUBTASK + "," + super.getName() + "," +
+                super.getStatus() + "," + super.getDescription() + "," + idParentTask + "/n";
+    }
 }
