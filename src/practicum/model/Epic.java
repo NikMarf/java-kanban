@@ -1,5 +1,6 @@
 package practicum.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -18,6 +19,11 @@ public class Epic extends Task {
 
     public ArrayList<SubTask> getSubTasks() {
         return subTasks;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return getStartTime().plusMinutes(getDuration().toMinutes());
     }
 
     @Override

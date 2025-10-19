@@ -1,5 +1,8 @@
 package practicum.model;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,11 +10,14 @@ public class Task {
     private String description;
     private StatusProgress status;
     private int id;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String name, String description, StatusProgress status) {
         this.name = name; // Поле имени
         this.description = description; // Поле описани
         this.status = status; // Поле статуса
+
     }
 
     public Task(String name, String description, StatusProgress status, int id) {
@@ -19,6 +25,24 @@ public class Task {
         this.description = description; // Поле описани
         this.status = status; // Поле статуса
         this.id = id; // Поле идентификатора
+    }
+
+    public Task(String name, String description, StatusProgress status, long duration, LocalDateTime startTime) {
+        this.name = name; // Поле имени
+        this.description = description; // Поле описани
+        this.status = status; // Поле статуса
+        this.duration = Duration.ofMinutes(duration); // Поле продолжительности задачи
+        this.startTime = startTime; // Поле даты и времени когда предполагается приступить к выполнению задачи
+
+    }
+
+    public Task(String name, String description, StatusProgress status, int id, long duration, LocalDateTime startTime) {
+        this.name = name; // Поле имени
+        this.description = description; // Поле описани
+        this.status = status; // Поле статуса
+        this.id = id; // Поле идентификатора
+        this.duration = Duration.ofMinutes(duration); // Поле продолжительности задачи
+        this.startTime = startTime; // Поле даты и времени когда предполагается приступить к выполнению задачи
     }
 
     public String getName() {
@@ -38,10 +62,19 @@ public class Task {
     }
 
     public void setId(int id) {
-
         this.id = id;
+    }
 
+    public Duration getDuration() {
+        return duration;
+    }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
     }
 
     public void setName(String name) {

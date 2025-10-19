@@ -1,5 +1,7 @@
 package practicum.model;
 
+import java.time.LocalDateTime;
+
 public class SubTask extends Task {
 
     private int idParentTask; //Поле хранения идентификатора родителя
@@ -10,6 +12,18 @@ public class SubTask extends Task {
     }
 
     public SubTask(String name, String description, StatusProgress status, int id, int idParentTask) {
+        super(name, description, status, id);
+        this.idParentTask = idParentTask;
+    }
+
+    public SubTask(String name, String description, StatusProgress status, int idParentTask,
+                   long duration, LocalDateTime startTime) {
+        super(name, description, status);
+        this.idParentTask = idParentTask;
+    }
+
+    public SubTask(String name, String description, StatusProgress status, int id, int idParentTask,
+                   long duration, LocalDateTime startTime) {
         super(name, description, status, id);
         this.idParentTask = idParentTask;
     }
