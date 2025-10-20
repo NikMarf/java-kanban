@@ -31,9 +31,8 @@ public class Task {
         this.name = name; // Поле имени
         this.description = description; // Поле описани
         this.status = status; // Поле статуса
-        this.duration = Duration.ofMinutes(duration); // Поле продолжительности задачи
         this.startTime = startTime; // Поле даты и времени когда предполагается приступить к выполнению задачи
-
+        this.duration = Duration.ofMinutes(duration); // Поле продолжительности задачи
     }
 
     public Task(String name, String description, StatusProgress status, int id, long duration, LocalDateTime startTime) {
@@ -41,8 +40,8 @@ public class Task {
         this.description = description; // Поле описани
         this.status = status; // Поле статуса
         this.id = id; // Поле идентификатора
-        this.duration = Duration.ofMinutes(duration); // Поле продолжительности задачи
         this.startTime = startTime; // Поле даты и времени когда предполагается приступить к выполнению задачи
+        this.duration = Duration.ofMinutes(duration); // Поле продолжительности задачи
     }
 
     public String getName() {
@@ -87,6 +86,14 @@ public class Task {
 
     public void setStatus(StatusProgress status) {
         this.status = status;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     @Override
