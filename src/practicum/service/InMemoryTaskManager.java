@@ -4,6 +4,8 @@ import practicum.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -14,6 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskCollection;
     private HashMap<Integer, Epic> epicCollection;
     private HashMap<Integer, SubTask> subTaskCollection;
+    private Set<Task> treeSetCollectionTaskByTime;
 
     public HashMap<Integer, Task> getTaskCollection() {
         return taskCollection;
@@ -51,6 +54,10 @@ public class InMemoryTaskManager implements TaskManager {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
         subTaskCollection = new HashMap<>();
+    }
+
+    public void getPrioritizedTasks() {
+
     }
 
     @Override

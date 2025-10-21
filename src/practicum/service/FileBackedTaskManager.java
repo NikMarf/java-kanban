@@ -8,6 +8,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -228,28 +231,61 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         example.reverse();
         switch (example.toString()) {
             case "Task":
-                return str = String.join(",",
-                        String.valueOf(task.getId()),
-                        TaskFields.TASK.toString(),
-                        task.getName(),
-                        task.getStatus().toString(),
-                        task.getDescription());
+                if (task.getStartTime() != null && task.getDuration() != null) {
+                    return str = String.join(",",
+                            String.valueOf(task.getId()),
+                            TaskFields.TASK.toString(),
+                            task.getName(),
+                            task.getStatus().toString(),
+                            task.getDescription(),
+                            task.getStartTime().toString(),
+                            task.getDuration().toString());
+                } else {
+                    return str = String.join(",",
+                            String.valueOf(task.getId()),
+                            TaskFields.TASK.toString(),
+                            task.getName(),
+                            task.getStatus().toString(),
+                            task.getDescription());
+                }
+
             case "Epic":
-                return str = String.join(",",
-                        String.valueOf(task.getId()),
-                        TaskFields.EPIC.toString(),
-                        task.getName(),
-                        task.getStatus().toString(),
-                        task.getDescription());
+                if (task.getStartTime() != null && task.getDuration() != null) {
+                    return str = String.join(",",
+                            String.valueOf(task.getId()),
+                            TaskFields.EPIC.toString(),
+                            task.getName(),
+                            task.getStatus().toString(),
+                            task.getDescription(),
+                            task.getStatus().toString(),
+                            task.getDescription());
+                } else {
+                    return str = String.join(",",
+                            String.valueOf(task.getId()),
+                            TaskFields.EPIC.toString(),
+                            task.getName(),
+                            task.getStatus().toString(),
+                            task.getDescription());
+                }
+
             case "SubTask":
-                SubTask sub = (SubTask)task;
-                return str = String.join(",",
-                        String.valueOf(task.getId()),
-                        TaskFields.SUBTASK.toString(),
-                        task.getName(),
-                        task.getStatus().toString(),
-                        task.getDescription(),
-                        String.valueOf(sub.getIdParentTask()));
+                if (task.getStartTime() != null && task.getDuration() != null) {
+                    return str = String.join(",",
+                            String.valueOf(task.getId()),
+                            TaskFields.SUBTASK.toString(),
+                            task.getName(),
+                            task.getStatus().toString(),
+                            task.getDescription(),
+                            task.getStartTime().toString(),
+                            task.getDuration().toString());
+                } else {
+                    return str = String.join(",",
+                            String.valueOf(task.getId()),
+                            TaskFields.SUBTASK.toString(),
+                            task.getName(),
+                            task.getStatus().toString(),
+                            task.getDescription());
+                }
             default:
                 return str;
         }
@@ -259,14 +295,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String[] splitTask = value.split(",");
         switch (splitTask[1]) {
             case "TASK":
-                return new Task(splitTask[2], splitTask[4], StatusProgress.valueOf(splitTask[3]),
-                        Integer.parseInt(splitTask[0]));
+                if (splitTask.length < 8) {
+                    return new Task(splitTask[2], splitTask[4], StatusProgress.valueOf(splitTask[3]),
+                            Integer.parseInt(splitTask[0]));
+                } else {
+                    return new Task(splitTask[2], splitTask[4], StatusProgress.valueOf(splitTask[3]),
+                            Integer.parseInt(splitTask[0]), Long.parseUnsignedLong(splitTask[7]), LocalDateTime.parse(splitTask[6]));
+                }
+
             case "EPIC":
                 return new Epic(splitTask[2], splitTask[4], StatusProgress.valueOf(splitTask[3]),
                         Integer.parseInt(splitTask[0]));
             case "SUBTASK":
-                return new SubTask(splitTask[2], splitTask[4], StatusProgress.valueOf(splitTask[3]),
-                        Integer.parseInt(splitTask[0]), Integer.parseInt(splitTask[5]));
+                if (splitTask.length < 9) {
+                    return new SubTask(splitTask[2], splitTask[4], StatusProgress.valueOf(splitTask[3]),
+                            Integer.parseInt(splitTask[0]), Integer.parseInt(splitTask[5]));
+                } else {
+                    return new SubTask(splitTask[2], splitTask[4], StatusProgress.valueOf(splitTask[3]),
+                            Integer.parseInt(splitTask[0]), Integer.parseInt(splitTask[5]),
+                            Long.parseUnsignedLong(splitTask[7]), LocalDateTime.parse(splitTask[6]));
+                }
+
             default:
                 return null;
         }
