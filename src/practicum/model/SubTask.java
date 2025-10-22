@@ -18,13 +18,13 @@ public class SubTask extends Task {
 
     public SubTask(String name, String description, StatusProgress status, int idParentTask,
                    long duration, LocalDateTime startTime) {
-        super(name, description, status);
+        super(name, description, status, duration, startTime);
         this.idParentTask = idParentTask;
     }
 
     public SubTask(String name, String description, StatusProgress status, int id, int idParentTask,
                    long duration, LocalDateTime startTime) {
-        super(name, description, status, id);
+        super(name, description, status, id, duration, startTime);
         this.idParentTask = idParentTask;
     }
 

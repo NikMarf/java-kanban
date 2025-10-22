@@ -19,10 +19,26 @@ public class Epic extends Task {
         this.subTasks = new ArrayList<>();
     }
 
-
-
     public ArrayList<SubTask> getSubTasks() {
         return subTasks;
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        if (!subTasks.isEmpty() && subTasks.size() > 1) {
+            for (int i = 0; i < subTasks.size(); i++) {
+                if (i == 0) {
+                    setStartTime(subTasks.get(i).getStartTime());
+                    setDuration(Duration.ofMinutes(subTasks.get(i).getDuration().toMinutes()));
+                } else {
+                    if (subTasks.get(i).getStartTime().isBefore(getStartTime())) {
+                        setStartTime(subTasks.get(i).getStartTime());
+                        setDuration(getDuration().plusMinutes(subTasks.get(i).getDuration().toMinutes()));
+                    }
+                }
+            }
+        }
+        return super.getStartTime();
     }
 
     @Override
@@ -40,7 +56,11 @@ public class Epic extends Task {
                 }
             }
         }
-        return getStartTime().plusMinutes(getDuration().toMinutes());
+        return this.endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     @Override

@@ -5,6 +5,7 @@ import practicum.model.SubTask;
 import practicum.model.Task;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public interface TaskManager {
     void addTask(Task task);

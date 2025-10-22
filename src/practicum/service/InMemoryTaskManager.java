@@ -13,7 +13,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskCollection;
     private HashMap<Integer, Epic> epicCollection;
     private HashMap<Integer, SubTask> subTaskCollection;
-    private Set<Task> treeSetCollectionTaskByTime;
+    private final Set<Task> PrioritizedTasks;
 
     public HashMap<Integer, Task> getTaskCollection() {
         return taskCollection;
@@ -27,8 +27,8 @@ public class InMemoryTaskManager implements TaskManager {
         return subTaskCollection;
     }
 
-    public Set<Task> getTreeSetCollectionTaskByTime() {
-        return treeSetCollectionTaskByTime;
+    public Set<Task> getPrioritizedTasks() {
+        return PrioritizedTasks;
     }
 
     public InMemoryHistoryManager getHistoryManager() {
@@ -55,25 +55,22 @@ public class InMemoryTaskManager implements TaskManager {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
         subTaskCollection = new HashMap<>();
-        treeSetCollectionTaskByTime = new TreeSet<>(comparator);
+        PrioritizedTasks = new TreeSet<>(comparator);
     }
 
     Comparator<Task> comparator = new Comparator<Task>() {
         @Override
         public int compare(Task o1, Task o2) {
-            if (o1.getStartTime().isAfter(o2.getStartTime())) {
-                return 1;
-            } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                return -1;
+            if (o1.getStartTime() != null && o2.getStartTime() != null) {
+                if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                    return 1;
+                } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                    return -1;
+                }
             }
             return 0;
         }
     };
-
-    public void getPrioritizedTasks() {
-
-
-    }
 
     @Override
     public void addTask(Task task) {
@@ -81,14 +78,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (task.getId() != 0 && !taskCollection.containsKey(task.getId())) {
             taskCollection.put(task.getId(), task);
             if (task.getStartTime() != null && task.getDuration() != null) {
-                treeSetCollectionTaskByTime.add(task);
+                PrioritizedTasks.add(task);
             }
         } else {
             int id = setTaskId();
             task.setId(id);
             taskCollection.put(task.getId(), task);
             if (task.getStartTime() != null && task.getDuration() != null) {
-                treeSetCollectionTaskByTime.add(task);
+                PrioritizedTasks.add(task);
             }
         }
     }
@@ -100,7 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
             epicCollection.put(epic.getId(), epic);
             epic.setStatus(checkStatusEpicProgress(epic.getId()));
             if (epic.getStartTime() != null && epic.getDuration() != null) {
-                treeSetCollectionTaskByTime.add(epic);
+                PrioritizedTasks.add(epic);
             }
         } else {
             int id = setTaskId();
@@ -108,7 +105,7 @@ public class InMemoryTaskManager implements TaskManager {
             epicCollection.put(epic.getId(), epic);
             epic.setStatus(checkStatusEpicProgress(epic.getId()));
             if (epic.getStartTime() != null && epic.getDuration() != null) {
-                treeSetCollectionTaskByTime.add(epic);
+                PrioritizedTasks.add(epic);
             }
         }
     }
@@ -118,14 +115,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (subTask.getId() != 0 && !subTaskCollection.containsKey(subTask.getId())) {
             subTaskCollection.put(subTask.getId(), subTask);
             if (subTask.getStartTime() != null && subTask.getDuration() != null) {
-                treeSetCollectionTaskByTime.add(subTask);
+                PrioritizedTasks.add(subTask);
             }
         } else {
             int id = setTaskId();
             subTask.setId(id);
             subTaskCollection.put(subTask.getId(), subTask);
             if (subTask.getStartTime() != null && subTask.getDuration() != null) {
-                treeSetCollectionTaskByTime.add(subTask);
+                PrioritizedTasks.add(subTask);
             }
         }
     }
@@ -133,8 +130,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addSubTaskInEpic(SubTask newSubTask) {
         //Добавление нового SubTask в Epic
-        int idSubTask = setTaskId();
-        newSubTask.setId(idSubTask);
+        newSubTask.setId(setTaskId());
         subTaskCollection.put(newSubTask.getId(), newSubTask);
         ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
         for (Integer id : epicCollection.keySet()) {
@@ -143,6 +139,11 @@ public class InMemoryTaskManager implements TaskManager {
                 newSubTask.setIdParentTask(id);
                 epic.getSubTasks().add(newSubTask);
                 epic.setStatus(checkStatusEpicProgress(epic.getId()));
+                if (newSubTask.getStartTime() != null && newSubTask.getDuration() != null) {
+                    epic.setStartTime(newSubTask.getStartTime());
+                    epic.setEndTime(newSubTask.getEndTime());
+                    PrioritizedTasks.add(newSubTask);
+                }
             }
         }
 
