@@ -2,10 +2,7 @@ package practicum.service;
 
 import practicum.model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -28,6 +25,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     public HashMap<Integer, SubTask> getSubTaskCollection() {
         return subTaskCollection;
+    }
+
+    public Set<Task> getTreeSetCollectionTaskByTime() {
+        return treeSetCollectionTaskByTime;
     }
 
     public InMemoryHistoryManager getHistoryManager() {
@@ -54,9 +55,23 @@ public class InMemoryTaskManager implements TaskManager {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
         subTaskCollection = new HashMap<>();
+        treeSetCollectionTaskByTime = new TreeSet<>(comparator);
     }
 
+    Comparator<Task> comparator = new Comparator<Task>() {
+        @Override
+        public int compare(Task o1, Task o2) {
+            if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                return 1;
+            } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                return -1;
+            }
+            return 0;
+        }
+    };
+
     public void getPrioritizedTasks() {
+
 
     }
 
@@ -65,10 +80,16 @@ public class InMemoryTaskManager implements TaskManager {
         //Добавление нового Task
         if (task.getId() != 0 && !taskCollection.containsKey(task.getId())) {
             taskCollection.put(task.getId(), task);
+            if (task.getStartTime() != null && task.getDuration() != null) {
+                treeSetCollectionTaskByTime.add(task);
+            }
         } else {
             int id = setTaskId();
             task.setId(id);
             taskCollection.put(task.getId(), task);
+            if (task.getStartTime() != null && task.getDuration() != null) {
+                treeSetCollectionTaskByTime.add(task);
+            }
         }
     }
 
@@ -78,11 +99,17 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic.getId() != 0 && !epicCollection.containsKey(epic.getId())) {
             epicCollection.put(epic.getId(), epic);
             epic.setStatus(checkStatusEpicProgress(epic.getId()));
+            if (epic.getStartTime() != null && epic.getDuration() != null) {
+                treeSetCollectionTaskByTime.add(epic);
+            }
         } else {
             int id = setTaskId();
             epic.setId(id);
             epicCollection.put(epic.getId(), epic);
             epic.setStatus(checkStatusEpicProgress(epic.getId()));
+            if (epic.getStartTime() != null && epic.getDuration() != null) {
+                treeSetCollectionTaskByTime.add(epic);
+            }
         }
     }
 
@@ -90,10 +117,16 @@ public class InMemoryTaskManager implements TaskManager {
     public void addSubTask(SubTask subTask) {
         if (subTask.getId() != 0 && !subTaskCollection.containsKey(subTask.getId())) {
             subTaskCollection.put(subTask.getId(), subTask);
+            if (subTask.getStartTime() != null && subTask.getDuration() != null) {
+                treeSetCollectionTaskByTime.add(subTask);
+            }
         } else {
             int id = setTaskId();
             subTask.setId(id);
             subTaskCollection.put(subTask.getId(), subTask);
+            if (subTask.getStartTime() != null && subTask.getDuration() != null) {
+                treeSetCollectionTaskByTime.add(subTask);
+            }
         }
     }
 
