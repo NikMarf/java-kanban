@@ -61,14 +61,28 @@ public class InMemoryTaskManager implements TaskManager {
     Comparator<Task> comparator = new Comparator<Task>() {
         @Override
         public int compare(Task o1, Task o2) {
-            if (o1.getStartTime() != null && o2.getStartTime() != null) {
-                if (o1.getStartTime().isAfter(o2.getStartTime())) {
-                    return 1;
-                } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                    return -1;
+            if (o1.getClass().equals(o2.getClass())) {
+                if (o1.getStartTime() != null && o2.getStartTime() != null) {
+                    if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                        return 1;
+                    } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                        return -1;
+                    }
                 }
+                return 0;
+            } else {
+                if (o1.getStartTime() != null && o2.getStartTime() != null) {
+                    if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                        return 1;
+                    } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                        return -1;
+                    } else {
+                        return -1;
+                    }
+                }
+                return 0;
             }
-            return 0;
+
         }
     };
 
@@ -142,8 +156,15 @@ public class InMemoryTaskManager implements TaskManager {
                 if (newSubTask.getStartTime() != null && newSubTask.getDuration() != null) {
                     epic.setStartTime(newSubTask.getStartTime());
                     epic.setEndTime(newSubTask.getEndTime());
+                    epic.setDuration(newSubTask.getDuration());
                     PrioritizedTasks.add(newSubTask);
                 }
+                if (epic.getSubTasks().size() == 1) {
+                    if (epic.getStartTime() != null && epic.getDuration() != null) {
+                        PrioritizedTasks.add(epic);
+                    }
+                }
+
             }
         }
 
