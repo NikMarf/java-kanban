@@ -2,6 +2,8 @@ package practicum.service;
 
 import practicum.model.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -86,102 +88,139 @@ public class InMemoryTaskManager implements TaskManager {
         }
     };
 
+    public boolean isTimeCollisions(Task t1, Task t2) {
+        if ((t1.getStartTime() == null && t2.getStartTime() == null) || !t1.getClass().equals(t2.getClass())) {
+            return false;
+        } else {
+            return t1.getStartTime().plusMinutes(t1.getDuration().toMinutes()).isAfter(t2.getStartTime()) &&
+                    (t2.getStartTime().plusMinutes(t2.getDuration().toMinutes()).isAfter(t1.getStartTime()
+                            .plusMinutes(t1.getDuration().toMinutes())) ||
+                            t2.getStartTime().plusMinutes(t2.getDuration().toMinutes()).isAfter(t1.getStartTime()));
+        }
+    }
+
+    public boolean isTimeCollisionsCollection(Task taskCheck) {
+        return getPrioritizedTasks().stream()
+                .filter(task -> task.getId() != taskCheck.getId())
+                .anyMatch(task -> isTimeCollisions(task, taskCheck));
+    }
+
     @Override
     public void addTask(Task task) {
-        //Добавление нового Task
-        if (task.getId() != 0 && !taskCollection.containsKey(task.getId())) {
-            taskCollection.put(task.getId(), task);
-            if (task.getStartTime() != null && task.getDuration() != null) {
-                PrioritizedTasks.add(task);
-            }
+
+        if (isTimeCollisionsCollection(task)) {
+            throw new IllegalArgumentException("Обнаружено временное пересечение задач");
         } else {
-            int id = setTaskId();
-            task.setId(id);
-            taskCollection.put(task.getId(), task);
-            if (task.getStartTime() != null && task.getDuration() != null) {
-                PrioritizedTasks.add(task);
+            //Добавление нового Task
+            if (task.getId() != 0 && !taskCollection.containsKey(task.getId())) {
+                taskCollection.put(task.getId(), task);
+                if (task.getStartTime() != null && task.getDuration() != null) {
+                    PrioritizedTasks.add(task);
+                }
+            } else {
+                int id = setTaskId();
+                task.setId(id);
+                taskCollection.put(task.getId(), task);
+                if (task.getStartTime() != null && task.getDuration() != null) {
+                    PrioritizedTasks.add(task);
+                }
             }
         }
     }
 
     @Override
     public void addEpic(Epic epic) {
-        //Добавление нового Epic
-        if (epic.getId() != 0 && !epicCollection.containsKey(epic.getId())) {
-            epicCollection.put(epic.getId(), epic);
-            epic.setStatus(checkStatusEpicProgress(epic.getId()));
-            if (epic.getStartTime() != null && epic.getDuration() != null) {
-                PrioritizedTasks.add(epic);
-            }
+        if (isTimeCollisionsCollection(epic)) {
+            throw new IllegalArgumentException("Обнаружено временное пересечение задач");
         } else {
-            int id = setTaskId();
-            epic.setId(id);
-            epicCollection.put(epic.getId(), epic);
-            epic.setStatus(checkStatusEpicProgress(epic.getId()));
-            if (epic.getStartTime() != null && epic.getDuration() != null) {
-                PrioritizedTasks.add(epic);
+            //Добавление нового Epic
+            if (epic.getId() != 0 && !epicCollection.containsKey(epic.getId())) {
+                epicCollection.put(epic.getId(), epic);
+                epic.setStatus(checkStatusEpicProgress(epic.getId()));
+                if (epic.getStartTime() != null && epic.getDuration() != null) {
+                    PrioritizedTasks.add(epic);
+                }
+            } else {
+                int id = setTaskId();
+                epic.setId(id);
+                epicCollection.put(epic.getId(), epic);
+                epic.setStatus(checkStatusEpicProgress(epic.getId()));
+                if (epic.getStartTime() != null && epic.getDuration() != null) {
+                    PrioritizedTasks.add(epic);
+                }
             }
         }
+
     }
 
     @Override
     public void addSubTask(SubTask subTask) {
-        if (subTask.getId() != 0 && !subTaskCollection.containsKey(subTask.getId())) {
-            subTaskCollection.put(subTask.getId(), subTask);
-            if (subTask.getStartTime() != null && subTask.getDuration() != null) {
-                PrioritizedTasks.add(subTask);
-            }
+        if (isTimeCollisionsCollection(subTask)) {
+            throw new IllegalArgumentException("Обнаружено временное пересечение задач");
         } else {
-            int id = setTaskId();
-            subTask.setId(id);
-            subTaskCollection.put(subTask.getId(), subTask);
-            if (subTask.getStartTime() != null && subTask.getDuration() != null) {
-                PrioritizedTasks.add(subTask);
+            if (subTask.getId() != 0 && !subTaskCollection.containsKey(subTask.getId())) {
+                subTaskCollection.put(subTask.getId(), subTask);
+                if (subTask.getStartTime() != null && subTask.getDuration() != null) {
+                    PrioritizedTasks.add(subTask);
+                }
+            } else {
+                int id = setTaskId();
+                subTask.setId(id);
+                subTaskCollection.put(subTask.getId(), subTask);
+                if (subTask.getStartTime() != null && subTask.getDuration() != null) {
+                    PrioritizedTasks.add(subTask);
+                }
             }
         }
+
     }
 
     @Override
     public void addSubTaskInEpic(SubTask newSubTask) {
-        //Добавление нового SubTask в Epic
-        newSubTask.setId(setTaskId());
-        subTaskCollection.put(newSubTask.getId(), newSubTask);
-        ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
-        for (Integer id : epicCollection.keySet()) {
-            if (((Integer)newSubTask.getIdParentTask()).equals(id)) {
-                Epic epic = epicCollection.get(id);
-                newSubTask.setIdParentTask(id);
-                epic.getSubTasks().add(newSubTask);
-                epic.setStatus(checkStatusEpicProgress(epic.getId()));
-                if (newSubTask.getStartTime() != null && newSubTask.getDuration() != null) {
-                    epic.setStartTime(newSubTask.getStartTime());
-                    epic.setEndTime(newSubTask.getEndTime());
-                    epic.setDuration(newSubTask.getDuration());
-                    PrioritizedTasks.add(newSubTask);
+        if (isTimeCollisionsCollection(newSubTask)) {
+            throw new IllegalArgumentException("Обнаружено временное пересечение задач");
+        } else {
+            //Добавление нового SubTask в Epic
+            newSubTask.setId(setTaskId());
+            subTaskCollection.put(newSubTask.getId(), newSubTask);
+            ArrayList<Integer> repetittionsSubTask = new ArrayList<>();
+            for (Integer id : epicCollection.keySet()) {
+                if (((Integer)newSubTask.getIdParentTask()).equals(id)) {
+                    Epic epic = epicCollection.get(id);
+                    newSubTask.setIdParentTask(id);
+                    epic.getSubTasks().add(newSubTask);
+                    epic.setStatus(checkStatusEpicProgress(epic.getId()));
+                    if (newSubTask.getStartTime() != null && newSubTask.getDuration() != null) {
+                        epic.setStartTime(newSubTask.getStartTime());
+                        epic.setEndTime(newSubTask.getEndTime());
+                        epic.setDuration(newSubTask.getDuration());
+                        PrioritizedTasks.add(newSubTask);
+                    }
+                    if (epic.getSubTasks().size() == 1) {
+                        if (epic.getStartTime() != null && epic.getDuration() != null) {
+                            PrioritizedTasks.add(epic);
+                        }
+                    }
+
                 }
-                if (epic.getSubTasks().size() == 1) {
-                    if (epic.getStartTime() != null && epic.getDuration() != null) {
-                        PrioritizedTasks.add(epic);
+            }
+
+            for (Epic epic : epicCollection.values()) {
+                for (int j = 0; j < epic.getSubTasks().size(); j++) {
+                    if (j < epic.getSubTasks().size() - 1) {
+                        if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
+                            repetittionsSubTask.add(j + 1);
+                        }
                     }
                 }
-
+                if (!repetittionsSubTask.isEmpty()) {
+                    for (Integer rep : repetittionsSubTask) {
+                        epic.getSubTasks().remove((int) rep);
+                    }
+                }
             }
         }
 
-        for (Epic epic : epicCollection.values()) {
-            for (int j = 0; j < epic.getSubTasks().size(); j++) {
-                if (j < epic.getSubTasks().size() - 1) {
-                    if (epic.getSubTasks().get(j).equals(epic.getSubTasks().get(j + 1))) {
-                        repetittionsSubTask.add(j + 1);
-                    }
-                }
-            }
-            if (!repetittionsSubTask.isEmpty()) {
-                for (Integer rep : repetittionsSubTask) {
-                    epic.getSubTasks().remove((int) rep);
-                }
-            }
-        }
     }
 
     @Override
