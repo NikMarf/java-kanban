@@ -223,6 +223,50 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
+    public void addSubTaskInEpicStream(SubTask newSubTask) {
+        if (isTimeCollisionsCollection(newSubTask)) {
+            throw new IllegalArgumentException("Обнаружено временное пересечение задач");
+        }
+
+        // Присваиваем ID и сохраняем подзадачу
+        newSubTask.setId(setTaskId());
+        subTaskCollection.put(newSubTask.getId(), newSubTask);
+
+        // Находим эпик, к которому принадлежит сабтаск
+        epicCollection.entrySet().stream()
+                .filter(entry -> entry.getKey().equals(newSubTask.getIdParentTask()))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .ifPresent(epic -> {
+                    epic.getSubTasks().add(newSubTask);
+                    epic.setStatus(checkStatusEpicProgress(epic.getId()));
+
+                    // Обновляем время и приоритеты
+                    if (newSubTask.getStartTime() != null && newSubTask.getDuration() != null) {
+                        epic.setStartTime(newSubTask.getStartTime());
+                        epic.setEndTime(newSubTask.getEndTime());
+                        epic.setDuration(newSubTask.getDuration());
+                        PrioritizedTasks.add(newSubTask);
+                    }
+
+                    if (epic.getSubTasks().size() == 1 &&
+                            epic.getStartTime() != null &&
+                            epic.getDuration() != null) {
+                        PrioritizedTasks.add(epic);
+                    }
+                });
+
+        // Удаляем повторяющиеся подзадачи в каждом эпике
+        epicCollection.values().forEach(epic -> {
+            List<SubTask> uniqueSubtasks = epic.getSubTasks().stream()
+                    .distinct()
+                    .toList();
+            epic.getSubTasks().clear();
+            epic.getSubTasks().addAll(uniqueSubtasks);
+        });
+    }
+
+
     @Override
     public void updateTask(Task task) {
         // Обновление Task
@@ -436,6 +480,21 @@ public class InMemoryTaskManager implements TaskManager {
         return idParentSubTask;
     }
 
+    public List<SubTask> outputByIdSubTaskStream(int idOutputEpicOrSubTask) {
+        //Возвращение конретного SubTask из Epic
+        if (getEpicCollection().containsKey(idOutputEpicOrSubTask)) {
+            return subTaskCollection.values().stream()
+                    .filter(subTask -> subTask.getIdParentTask() != idOutputEpicOrSubTask)
+                    .toList();
+        } else if (getSubTaskCollection().containsKey(idOutputEpicOrSubTask)) {
+            return subTaskCollection.values().stream()
+                    .filter(subTask -> subTask.getId() != idOutputEpicOrSubTask)
+                    .toList();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     private StatusProgress checkStatusEpicProgress(int id) {
         //Присвоение статуса Epic
         Epic epic = epicCollection.get(id);
@@ -457,7 +516,6 @@ public class InMemoryTaskManager implements TaskManager {
                         statusProgress = StatusProgress.IN_PROGRESS;
                         break;
                     }
-
             }
         }
         return statusProgress;

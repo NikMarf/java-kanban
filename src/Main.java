@@ -23,8 +23,8 @@ public class Main {
         //System.out.println(task1.id);
         SubTask taskSub1 = new SubTask("Сделать срочно!", "Пропылесосить", StatusProgress.NEW, 3, 300, LocalDateTime.of(2010, 10, 10, 10, 0));
         SubTask taskSub2 = new SubTask("Сделать срочноBUBUB!", "Пропылесосить", StatusProgress.DONE, 3, 500, LocalDateTime.of(2010, 10, 2, 15, 0));
-        SubTask taskSub3 = new SubTask("После пылесоса", "Протереть полки", StatusProgress.NEW, 3, 60, LocalDateTime.of(2009, 11, 2, 15, 0));
-        SubTask taskSub4 = new SubTask("Новая задача", "Отладить все", StatusProgress.NEW, 3, 80, LocalDateTime.of(2009, 11, 2, 15, 30));
+        //SubTask taskSub3 = new SubTask("После пылесоса", "Протереть полки", StatusProgress.NEW, 3, 60, LocalDateTime.of(2009, 11, 2, 15, 0));
+        //SubTask taskSub4 = new SubTask("Новая задача", "Отладить все", StatusProgress.NEW, 3, 80, LocalDateTime.of(2009, 11, 2, 15, 30));
         SubTask subTest = new SubTask("ХХХХХ", "ЫЫЫЫЫЫЫ", StatusProgress.IN_PROGRESS, 4);
         SubTask subTestPR = new SubTask("ХХХХХ", "ЫЫЫЫЫЫЫ", StatusProgress.IN_PROGRESS, 4);
         SubTask subTest1 = new SubTask("dddddd", "ЫЫЫooЫЫ", StatusProgress.DONE, 3);
@@ -37,9 +37,9 @@ public class Main {
         //System.out.println(manager.returnAllEpic());
         manager.addSubTaskInEpic(taskSub1);
         manager.addSubTaskInEpic(taskSub2);
-        manager.addSubTaskInEpic(taskSub3);
-        manager.addSubTaskInEpic(taskSub4);
-        manager.addSubTaskInEpic(taskSub4);
+        //manager.addSubTaskInEpic(taskSub3);
+       //manager.addSubTaskInEpic(taskSub4);
+        //manager.addSubTaskInEpic(taskSub4);
         manager.addSubTaskInEpic(subTest);
         manager.addSubTaskInEpic(subTestPR);
         manager.addSubTaskInEpic(subTest1);
