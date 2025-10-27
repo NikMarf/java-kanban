@@ -226,12 +226,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (isTimeCollisionsCollection(newSubTask)) {
             throw new IllegalArgumentException("Обнаружено временное пересечение задач");
         }
-
-        // Присваиваем ID и сохраняем подзадачу
+        //Добавление нового SubTask в Epic
         newSubTask.setId(setTaskId());
         subTaskCollection.put(newSubTask.getId(), newSubTask);
-
-        // Находим эпик, к которому принадлежит сабтаск
         epicCollection.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(newSubTask.getIdParentTask()))
                 .map(Map.Entry::getValue)
@@ -239,15 +236,13 @@ public class InMemoryTaskManager implements TaskManager {
                 .ifPresent(epic -> {
                     epic.getSubTasks().add(newSubTask);
                     epic.setStatus(checkStatusEpicProgress(epic.getId()));
-
-                    // Обновляем время и приоритеты
+                    // Обновление времени заполнение PrioritizedTasks
                     if (newSubTask.getStartTime() != null && newSubTask.getDuration() != null) {
                         epic.setStartTime(newSubTask.getStartTime());
                         epic.setEndTime(newSubTask.getEndTime());
                         epic.setDuration(newSubTask.getDuration());
                         PrioritizedTasks.add(newSubTask);
                     }
-
                     if (epic.getSubTasks().size() == 1 &&
                             epic.getStartTime() != null &&
                             epic.getDuration() != null) {
@@ -255,7 +250,7 @@ public class InMemoryTaskManager implements TaskManager {
                     }
                 });
 
-        // Удаляем повторяющиеся подзадачи в каждом эпике
+        // Удаление повторяющихся подзадач в каждом эпике
         epicCollection.values().forEach(epic -> {
             List<SubTask> uniqueSubtasks = epic.getSubTasks().stream()
                     .distinct()
