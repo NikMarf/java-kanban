@@ -1,11 +1,7 @@
 package practicum.service;
 
 import practicum.model.*;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -16,7 +12,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskCollection;
     private HashMap<Integer, Epic> epicCollection;
     private HashMap<Integer, SubTask> subTaskCollection;
-    private final Set<Task> PrioritizedTasks;
+    private final Set<Task> prioritizedTasks;
 
     public HashMap<Integer, Task> getTaskCollection() {
         return taskCollection;
@@ -31,7 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public Set<Task> getPrioritizedTasks() {
-        return PrioritizedTasks;
+        return prioritizedTasks;
     }
 
     public InMemoryHistoryManager getHistoryManager() {
@@ -58,7 +54,7 @@ public class InMemoryTaskManager implements TaskManager {
         taskCollection = new HashMap<>();
         epicCollection = new HashMap<>();
         subTaskCollection = new HashMap<>();
-        PrioritizedTasks = new TreeSet<>(comparator);
+        prioritizedTasks = new TreeSet<>(comparator);
     }
 
     Comparator<Task> comparator = new Comparator<Task>() {
@@ -116,14 +112,14 @@ public class InMemoryTaskManager implements TaskManager {
             if (task.getId() != 0 && !taskCollection.containsKey(task.getId())) {
                 taskCollection.put(task.getId(), task);
                 if (task.getStartTime() != null && task.getDuration() != null) {
-                    PrioritizedTasks.add(task);
+                    prioritizedTasks.add(task);
                 }
             } else {
                 int id = setTaskId();
                 task.setId(id);
                 taskCollection.put(task.getId(), task);
                 if (task.getStartTime() != null && task.getDuration() != null) {
-                    PrioritizedTasks.add(task);
+                    prioritizedTasks.add(task);
                 }
             }
         }
@@ -139,7 +135,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epicCollection.put(epic.getId(), epic);
                 epic.setStatus(checkStatusEpicProgress(epic.getId()));
                 if (epic.getStartTime() != null && epic.getDuration() != null) {
-                    PrioritizedTasks.add(epic);
+                    prioritizedTasks.add(epic);
                 }
             } else {
                 int id = setTaskId();
@@ -147,7 +143,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epicCollection.put(epic.getId(), epic);
                 epic.setStatus(checkStatusEpicProgress(epic.getId()));
                 if (epic.getStartTime() != null && epic.getDuration() != null) {
-                    PrioritizedTasks.add(epic);
+                    prioritizedTasks.add(epic);
                 }
             }
         }
@@ -162,14 +158,14 @@ public class InMemoryTaskManager implements TaskManager {
             if (subTask.getId() != 0 && !subTaskCollection.containsKey(subTask.getId())) {
                 subTaskCollection.put(subTask.getId(), subTask);
                 if (subTask.getStartTime() != null && subTask.getDuration() != null) {
-                    PrioritizedTasks.add(subTask);
+                    prioritizedTasks.add(subTask);
                 }
             } else {
                 int id = setTaskId();
                 subTask.setId(id);
                 subTaskCollection.put(subTask.getId(), subTask);
                 if (subTask.getStartTime() != null && subTask.getDuration() != null) {
-                    PrioritizedTasks.add(subTask);
+                    prioritizedTasks.add(subTask);
                 }
             }
         }
@@ -195,12 +191,12 @@ public class InMemoryTaskManager implements TaskManager {
                         epic.setStartTime(newSubTask.getStartTime());
                         epic.setEndTime(newSubTask.getEndTime());
                         epic.setDuration(newSubTask.getDuration());
-                        PrioritizedTasks.add(newSubTask);
+                        prioritizedTasks.add(newSubTask);
                     }
                     if (epic.getSubTasks().size() == 1 &&
                             epic.getStartTime() != null &&
                             epic.getDuration() != null) {
-                        PrioritizedTasks.add(epic);
+                        prioritizedTasks.add(epic);
                     }
                 });
 
@@ -324,8 +320,8 @@ public class InMemoryTaskManager implements TaskManager {
                 .peek(subTask -> {
                     if (subTask.getIdParentTask() == id) {
                         subTaskCollection.remove(id);
-                    }}
-                )
+                    }
+                })
                 .close();
     }
 
