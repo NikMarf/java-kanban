@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -192,7 +193,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> outputByIdSubTask(int idOutputEpicOrSubTask) {
+    public List<SubTask> outputByIdSubTask(int idOutputEpicOrSubTask) {
         return super.outputByIdSubTask(idOutputEpicOrSubTask);
     }
 

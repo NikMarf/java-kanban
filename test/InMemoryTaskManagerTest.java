@@ -13,20 +13,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ManagerTest {
-    @Test
-    void checkReturnManagerReady() throws IOException {
-        Manager manager = new Manager();
-        TaskManager taskManager = manager.getDefault();
-        assertNotNull(taskManager, "Менеджер задач не должен быть null");
-    }
-
-    @Test
-    void checkReturnManagerHistoryReady() {
-        Manager manager = new Manager();
-        HistoryManager historyManager = manager.getDefaultHistory();
-        assertNotNull(historyManager, "Менеджер задач не должен быть null");
-    }
+public class InMemoryTaskManagerTest extends TaskManagerTest {
 
     @Test
     void checkInMemoryTaskManagerFunctionality() {

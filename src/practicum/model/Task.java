@@ -3,6 +3,7 @@ package practicum.model;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -115,12 +116,24 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                ", id=" + id +
-                '}';
+        if (duration == null && startTime == null) {
+            return "Task{" +
+                    "name='" + name + '\'' +
+                    ", description='" + description + '\'' +
+                    ", status=" + status +
+                    ", id=" + id +
+                    '}';
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+            return "Task{" +
+                    "name='" + name + '\'' +
+                    ", description='" + description + '\'' +
+                    ", status=" + status +
+                    ", id=" + id +
+                    ", duration=" + duration +
+                    ", startTime=" + startTime.format(formatter) +
+                    '}';
+        }
     }
 
     public String toStringSave() {

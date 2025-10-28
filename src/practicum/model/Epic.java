@@ -2,6 +2,7 @@ package practicum.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -94,13 +95,26 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "subTasks=" + subTasks +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status=" + getStatus() +
-                ", id=" + getId() +
-                '}';
+        if (getDuration() == null && getStartTime() == null) {
+            return "Epic{" +
+                    "subTasks=" + subTasks +
+                    ", name='" + getName() + '\'' +
+                    ", description='" + getDescription() + '\'' +
+                    ", status=" + getStatus() +
+                    ", id=" + getId() +
+                    '}';
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+            return "Epic{" +
+                    "subTasks=" + subTasks +
+                    ", name='" + getName() + '\'' +
+                    ", description='" + getDescription() + '\'' +
+                    ", status=" + getStatus() +
+                    ", id=" + getId() +
+                    ", duration=" + getDuration() +
+                    ", startTime=" + getStartTime().format(formatter) +
+                    '}';
+        }
     }
 
     @Override
