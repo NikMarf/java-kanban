@@ -155,7 +155,6 @@ public class InMemoryTaskManagerTest extends TaskManagerTest {
 
         assertEquals(taskManager.returnAllEpic().get(0).getSubTasks().get(0), subTask,
                 "В Epic присутствует неактуальное значение Id");
-
     }
 
 

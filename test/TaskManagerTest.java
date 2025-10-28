@@ -10,7 +10,6 @@ import practicum.service.Manager;
 import practicum.service.TaskManager;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,8 +18,8 @@ abstract class TaskManagerTest {
 
     private TaskManager manager;
     private Epic epic;
-    private SubTask sub1;
-    private SubTask sub2;
+    private SubTask subTask1;
+    private SubTask subTask2;
 
     @Test
     void checkReturnManagerReady() throws IOException {
@@ -83,11 +82,11 @@ abstract class TaskManagerTest {
         epic = new Epic("Epic 1", "Test Epic", StatusProgress.NEW);
         manager.addEpic(epic);
 
-        sub1 = new SubTask("Sub 1", "Subtask 1", StatusProgress.NEW, epic.getId());
-        sub2 = new SubTask("Sub 2", "Subtask 2", StatusProgress.NEW, epic.getId());
+        subTask1 = new SubTask("Sub 1", "Subtask 1", StatusProgress.NEW, epic.getId());
+        subTask2 = new SubTask("Sub 2", "Subtask 2", StatusProgress.NEW, epic.getId());
 
-        manager.addSubTaskInEpic(sub1);
-        manager.addSubTaskInEpic(sub2);
+        manager.addSubTaskInEpic(subTask1);
+        manager.addSubTaskInEpic(subTask2);
     }
 
     @Test
@@ -97,32 +96,30 @@ abstract class TaskManagerTest {
 
     @Test
     void shouldSetEpicStatusDoneIfAllSubtasksDone() {
-        sub1.setStatus(StatusProgress.DONE);
-        sub2.setStatus(StatusProgress.DONE);
-        manager.updateSubTask(sub1, sub1.getId());
-        manager.updateSubTask(sub2, sub2.getId());
+        subTask1.setStatus(StatusProgress.DONE);
+        subTask2.setStatus(StatusProgress.DONE);
+        manager.updateSubTask(subTask1, subTask1.getId());
+        manager.updateSubTask(subTask2, subTask2.getId());
         assertEquals(StatusProgress.DONE, manager.getByIdEpic(epic.getId()).getStatus());
     }
 
     @Test
     void shouldSetEpicStatusInProgressIfMixedStatuses() {
-        sub1.setStatus(StatusProgress.NEW);
-        sub2.setStatus(StatusProgress.DONE);
-        manager.updateSubTask(sub1, sub1.getId());
-        manager.updateSubTask(sub2, sub2.getId());
+        subTask1.setStatus(StatusProgress.NEW);
+        subTask2.setStatus(StatusProgress.DONE);
+        manager.updateSubTask(subTask1, subTask1.getId());
+        manager.updateSubTask(subTask2, subTask2.getId());
         assertEquals(StatusProgress.IN_PROGRESS, manager.getByIdEpic(epic.getId()).getStatus());
     }
 
     @Test
     void shouldSetEpicStatusInProgressIfAllInProgress() {
-        sub1.setStatus(StatusProgress.IN_PROGRESS);
-        sub2.setStatus(StatusProgress.IN_PROGRESS);
-        manager.updateSubTask(sub1, sub1.getId());
-        manager.updateSubTask(sub2, sub2.getId());
+        subTask1.setStatus(StatusProgress.IN_PROGRESS);
+        subTask2.setStatus(StatusProgress.IN_PROGRESS);
+        manager.updateSubTask(subTask1, subTask1.getId());
+        manager.updateSubTask(subTask2, subTask2.getId());
         assertEquals(StatusProgress.IN_PROGRESS, manager.getByIdEpic(epic.getId()).getStatus());
     }
-
-
 
     abstract void checkInMemoryTaskManagerFunctionality();
 }
