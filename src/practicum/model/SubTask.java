@@ -1,5 +1,8 @@
 package practicum.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class SubTask extends Task {
 
     private int idParentTask; //Поле хранения идентификатора родителя
@@ -11,6 +14,18 @@ public class SubTask extends Task {
 
     public SubTask(String name, String description, StatusProgress status, int id, int idParentTask) {
         super(name, description, status, id);
+        this.idParentTask = idParentTask;
+    }
+
+    public SubTask(String name, String description, StatusProgress status, int idParentTask,
+                   long duration, LocalDateTime startTime) {
+        super(name, description, status, duration, startTime);
+        this.idParentTask = idParentTask;
+    }
+
+    public SubTask(String name, String description, StatusProgress status, int id, int idParentTask,
+                   long duration, LocalDateTime startTime) {
+        super(name, description, status, id, duration, startTime);
         this.idParentTask = idParentTask;
     }
 
@@ -29,13 +44,26 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask{" +
-                "name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status=" + getStatus() +
-                ", id=" + getId() +
-                ", idParentTask=" + idParentTask +
-                '}';
+        if (getDuration() == null && getStartTime() == null) {
+            return "SubTask{" +
+                    "name='" + getName() + '\'' +
+                    ", description='" + getDescription() + '\'' +
+                    ", status=" + getStatus() +
+                    ", id=" + getId() +
+                    ", idParentTask=" + idParentTask +
+                    '}';
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+            return "SubTask{" +
+                    "name='" + getName() + '\'' +
+                    ", description='" + getDescription() + '\'' +
+                    ", status=" + getStatus() +
+                    ", id=" + getId() +
+                    ", idParentTask=" + idParentTask +
+                    ", duration=" + getDuration() +
+                    ", startTime=" + getStartTime().format(formatter) +
+                    '}';
+        }
     }
 
     @Override

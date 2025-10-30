@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest {
 
     File tempFile;
     FileBackedTaskManager managerSave;
@@ -34,7 +34,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void shouldSaveAndLoadMultipleTasks() {
+    void checkInMemoryTaskManagerFunctionality() {
         Task task1 = new Task("Task 1", "Description Task", StatusProgress.NEW, 1);
         Epic epic1 = new Epic("Epic 1", "Description Epic", StatusProgress.IN_PROGRESS, 2);
         SubTask sub1 = new SubTask("SubTask 1", "Description SubTask", StatusProgress.DONE, 3, 2);

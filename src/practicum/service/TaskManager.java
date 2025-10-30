@@ -5,6 +5,7 @@ import practicum.model.SubTask;
 import practicum.model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     void addTask(Task task);
@@ -49,7 +50,7 @@ public interface TaskManager {
 
     SubTask getByIdSubTaskTask(int idOutput);
 
-    ArrayList<SubTask> outputByIdSubTask(int idOutputEpicOrSubTask);
+    List<SubTask> outputByIdSubTask(int idOutputEpicOrSubTask);
 
     ArrayList<Task> getHistory();
 

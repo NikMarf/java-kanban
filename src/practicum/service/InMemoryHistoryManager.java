@@ -15,6 +15,12 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
+        if (task == null) {
+            return;
+        }
+        if (task.getId() == 0) {
+            throw new NullPointerException("Попытка использовать task без id");
+        }
         if (nodeHistory.containsKey(task.getId())) {
             removeNode(nodeHistory.get(task.getId()));
             linkLast(nodeHistory.get(task.getId()));

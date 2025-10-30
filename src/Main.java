@@ -1,16 +1,11 @@
 import practicum.model.Task;
-import practicum.service.FileBackedTaskManager;
 import practicum.service.InMemoryTaskManager;
 import practicum.service.TaskManager;
-
 import java.io.IOException;
-
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        TaskManager manager = new InMemoryTaskManager();
-        TaskManager managerSave = new FileBackedTaskManager();
-        printAllTasks(managerSave);
+        InMemoryTaskManager manager = new InMemoryTaskManager();
     }
 
     private static void printAllTasks(TaskManager manager) {
